@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Faculte
+{% endblock %}
+{% block lesboutons %}
+	<a href="{{ path('faculte_index') }}" title="Retour à la liste " class="btn btn-info">
+		<i class="fa fa-reply-all"></i>
+	</a>
+	<a  href="{{ path('faculte_new') }}" title="Ajouter nouveau " class="btn btn-info">
+		<i class="fas fa-plus-circle"></i>
+	</a>
+{% endblock %}
+{% block titre %}
+	Modifier faculté
+{% endblock %}
+{% block body %}
+
+	{{ include('faculte/_form.html.twig', {'button_label': 'Update'}) }}
+
+	<a href="{{ path('faculte_index') }}">back to list</a>
+
+	{{ include('faculte/_delete_form.html.twig') }}
+{% endblock %}

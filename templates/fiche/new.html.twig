@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvelle Fiche
+{% endblock %}
+{% block positionnement %}
+	<span class="fa fa-angle-double-right"></span>
+	Fiche
+	<span class="fa fa-angle-double-right"></span>
+	Nouvelle fiche
+{% endblock %}
+{% block lesboutons %}
+	
+{% endblock %}
+{% block titre %}
+	Nouvelle fiche
+{% endblock %}
+{% block body %}
+	{{ include('fiche/_form.html.twig') }}
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}PaiementDepot index{% endblock %}
+{% block titre %}
+	Liste des paiement
+{% endblock %}
+{% block lesboutons %}
+	<a href="{{ path('paiement_depot_index') }}" title="Retour à la liste " class="btn btn-info">
+		<i class="fa fa-reply-all"></i>
+	</a>
+	<a href="{{ path('paiement_depot_creation') }}" title="Ajouter nouveau " class="btn btn-info">
+		<i class="fas fa-plus-circle"></i>
+	</a>
+{% endblock %}
+{% block positionnement %}
+	<span class="fa fa-angle-double-right"></span>
+	Finances 
+	<span class="fa fa-angle-double-right"></span>
+	Liste paiement 
+{% endblock %}
+{% block body %}
+	<table id="example1" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Date</th>
+                <th>Etudiant </th>
+                <th>Percepteur </th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th>#</th>
+                <th>Date</th>
+                <th>Etudiant </th>
+                <th>Percepteur </th>
+                <th>actions</th>
+            </tr>
+        </tfoot>
+        <tbody>
+        {% for paiement_depot in paiement_depots %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ paiement_depot.date ? paiement_depot.date|date('d-M-Y H:i:s') : '' }}</td>
+                <td>{{ paiement_depot.fiche.finaliste }}</td>
+                <td>{{ paiement_depot.user }}</td>
+                <td>
+                    <a href="{{ path('paiement_depot_show', {'id': paiement_depot.id}) }}"class="btn btn-default btn-sm"><span class="fa fa-search-plus"></span></a>
+                    {# <a href="{{ path('paiement_depot_edit', {'id': paiement_depot.id}) }}"class="btn btn-default btn-sm"><span class="fa fa-edit"></span></a> #}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4"class="text-warning">aucun élément trouvé</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+
+
+
+
+

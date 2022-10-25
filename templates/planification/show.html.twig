@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Planification Liste 
+{% endblock %}
+{% block lesboutons %}
+	<a href="{{ path('planification_index') }}" title="Retour à la liste " class="btn btn-info">
+		<i class="fa fa-reply-all"></i>
+	</a>
+	<a type="button" title="Ajouter nouveau " class="btn btn-info">
+		<i class="fas fa-plus-circle"></i>
+	</a>
+	<a href="{{ path('planification_edit', {'id': planification.id}) }}"title="Modifier élément  " class="btn btn-info">
+		<i class="fas fa-edit"></i>
+	</a>
+	<a type="button" title="Supprimer élément" class="btn btn-info">
+		<i class="fas fa-trash"></i>
+	</a>
+{% endblock %}
+{% block titre %}
+	Programme détaillé défense
+{% endblock %}
+
+{% block body %}
+	<table class="table">
+		<tbody>
+			<tr>
+				<th>Date</th>
+				<td>{{ planification.date ? planification.date|date('d/M/Y') : '' }}</td>
+			</tr>
+			<tr>
+				<th>Salle
+				</th>
+				<td>{{ planification.salle}}</td>
+			</tr>
+			<tr>
+				<th>temps Defense</th>
+				<td>{{ planification.minutesDefense }} mins </td>
+			</tr>
+			<tr>
+				<th>Temps Pause</th>
+				<td>{{ planification.minutesPause}} mins </td>
+			</tr>
+			<tr>
+				<th>IsValidee</th>
+				<td>{{ planification.isValidee ? '<span class="fa fa-circle-check"><span>' : 'No' }}</td>
+			</tr>
+			{% for lignePlanification in planification.lignePlanifications %}
+				<tr>
+					<th>{{loop.index}}</th>
+					<td>{{ lignePlanification.fiche.finaliste }}
+						-- débute :
+						{{ lignePlanification.heureDebut|date('H:i:s') }} <br />
+						{# <a href="{{url('')}}">Affecter lecteur <a><br /> #}
+						<a href="{{ path('ligne_planification_edit', {'id': planification.id}) }}"class="btn btn-default btn-sm"><span class="fa fa-edit"></span>Affecter lecteur</a>
+
+						
+						</td>
+				</tr>
+			{% endfor %}
+			<tr>
+				<th>Observation</th>
+				<td>{{ planification.observation }}</td>
+			</tr>
+		</tbody>
+	</table>
+	{% if is_granted('ROLE_ADMIN') %}
+	<a class="btn btn-default " href="{{ path('planification_valider', {'id': planification.id}) }}">
+	<span class="fa fa-check-circle"></span>
+	valider Planification</a>
+		{{ include('planification/_delete_form.html.twig') }}
+
+	{% endif %}
+{% endblock %}

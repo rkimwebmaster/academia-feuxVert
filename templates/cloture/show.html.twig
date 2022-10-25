@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cloture{% endblock %}
+{% block lesboutons %}
+	<a  href="{{ path('cloture_index') }}" title="Retour à la liste " class="btn btn-info">
+		<i class="fa fa-reply-all"></i>
+	</a>
+	<a href="{{ path('cloture_new') }}" title="Ajouter nouveau " href="{{ path('departement_new') }}" class="btn btn-info">
+		<i class="fas fa-plus-circle"></i>
+	</a>
+{% endblock %}
+{% block titre %}
+	Liste des défenses clôturés  
+{% endblock %}
+{% block positionnement %}
+	<span class="fa fa-angle-double-right"></span>
+	Défenses 
+	<span class="fa fa-angle-double-right"></span>
+	Clotures 
+{% endblock %}
+{% block body %}
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ cloture.id }}</td>
+            </tr>
+            <tr>
+                <th>Date</th>
+                <td>{{ cloture.date ? cloture.date|date('Y-m-d') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('cloture_index') }}">back to list</a>
+
+    <a href="{{ path('cloture_edit', {'id': cloture.id}) }}"class="btn btn-default btn-sm"><span class="fa fa-edit"></span></a>
+
+    {{ include('cloture/_delete_form.html.twig') }}
+{% endblock %}

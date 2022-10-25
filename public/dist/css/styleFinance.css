@@ -1,0 +1,12 @@
+.head {
+    background: #eee;
+    cursor: pointer;
+}
+
+.section .head, .section .section {
+    margin-left: 20px;
+}
+
+.section{
+    display:none;   
+}

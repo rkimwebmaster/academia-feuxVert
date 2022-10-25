@@ -1,0 +1,156 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Fiche
+{% endblock %}
+{% block lesboutons %}
+	<a href="{{ path('fiche_index') }}" title="Retour à la liste " class="btn btn-info">
+		<i class="fa fa-reply-all"></i>
+	</a>
+	<a type="button" title="Ajouter nouveau " class="btn btn-info">
+		<i class="fas fa-plus-circle"></i>
+	</a>
+	<a type="button" title="Modifier élément  " class="btn btn-info">
+		<i class="fas fa-edit"></i>
+	</a>
+	<a type="button" title="Supprimer élément" class="btn btn-info">
+		<i class="fas fa-trash"></i>
+	</a>
+{% endblock %}
+{% block titre %}
+	Modifier une fichhe
+{% endblock %}
+{% block positionnement %}
+	<span class="fa fa-angle-double-right"></span>
+	Fiche
+	<span class="fa fa-angle-double-right"></span>
+	{% if is_granted('ROLE_ADMIN') %}
+		Traiter
+	{% elseif is_granted('ROLE_FINALISTE') %}
+		Modifier
+	{% else %}
+		Aucun droit
+	{% endif %}
+{% endblock %}
+{% block body %}
+	{% if is_granted('ROLE_ADMIN') %}
+		<h3 class="text-uppercase">Fiche de proposition de sujet &#x2116;
+			{{fiche.id}}/{{fiche.faculte|u.truncate(3)}}/{{fiche.promotion.departement|u.truncate(3)}}/{{entreprise.anneeAcademiqueCourante}}</h3>
+		<div class="row">
+			<div class="col-sm-6 col-6">
+				Etudiant
+				<address>
+					<strong>{{fiche.finaliste.civilite }}
+						{{fiche.finaliste|upper }}</strong>
+					<br>
+					Promotion :
+					{{fiche.finaliste.promotion|capitalize}}
+					<br>
+					<a href="tel:{{fiche.finaliste.identite.telephone}}">
+						<span class="fa fa-phone"></span>
+					</a>
+					: (+243)
+					{{fiche.finaliste.identite.telephone}}<br>
+					<a href="tel:{{fiche.finaliste.user.email}}">
+						<span class="fa fa-envelope"></span>
+					</a>
+					:
+					{{fiche.finaliste.user.email}}
+					<br>
+				</address>
+			</div>
+			<div class="col-sm-6 col-6 float-right ">
+				{% if fiche.isValidee %}
+					Directeur
+					<address>
+						<strong>{{fiche.directeurRetenu.grade}}
+							{{fiche.directeurRetenu|upper}}</strong><br>
+						<a href="tel:{{fiche.directeurRetenu.identite.telephone}}">
+							<span class="fa fa-phone"></span>
+						</a>
+						: (+243)
+						{{fiche.directeurRetenu.identite.telephone}}<br>
+						{% if fiche.directeurRetenu.user %}
+							<a href="tel:{{fiche.directeurRetenu.user.email}}">
+								<span class="fa fa-envelope"></span>
+							</a>
+						{% endif %}
+						:
+						{% if fiche.directeurRetenu.user %}
+							{{fiche.directeurRetenu.user.email}}
+						{% endif %}
+					</address>
+				{% else %}
+					Directeur proposé
+					<address>
+						<strong>{{fiche.directeurPropose.grade}}
+							{{fiche.directeurPropose|upper}}</strong><br>
+						<a href="tel:{{fiche.directeurPropose.identite.telephone}}">
+							<span class="fa fa-phone"></span>
+						</a>
+						: (+243)
+						{{fiche.directeurPropose.identite.telephone}}<br>
+						{% if fiche.directeurPropose.user %}
+							<a href="tel:{{fiche.directeurPropose.user.email}}">
+								<span class="fa fa-envelope"></span>
+							</a>
+						{% endif %}
+						:
+						{% if fiche.directeurPropose.user %}
+							{{fiche.directeurPropose.user.email}}
+						{% endif %}
+					</address>
+				{% endif %}
+			</div>
+		</div>
+		<h6>
+			<i>
+				Date proposition :
+				{{fiche.date|date('d/M/Y')}}
+			</i>
+		</h6>
+<div class="row">
+		<div class="col-12">
+			{% for proposition in fiche.propositions %}
+				<div class="card card-row card-default">
+					<div class="card-header bg-info">
+						<h3 class="card-title">
+							{{proposition.sujet}}
+						</h3>
+						<div class="card-tools">
+							<a href="#" class="btn btn-tool btn-link">Sujet#{{loop.index}}</a>
+							<a href="#" title="Copiez ce sujet"  class="btn btn-tool">
+								<i class="fas fa-graduation-cap"></i>
+							</a>
+						</div>
+					</div>
+					<div class="card-body">
+						<p>
+							{{proposition.resume}}
+						</p>
+					</div>
+				</div>
+
+			{% endfor %}
+		</div>
+	</div>
+	{% endif %}
+	{{ form_start(form) }}
+	{{ form_widget(form) }}
+
+	{#{ include('fiche/_delete_form.html.twig') }#}
+{% endblock %}
+
+{% block cardfooter %}
+	<button class="btn btn-success ">
+		<span class="fa fa-download"></span>
+		{{ button_label|default('Valider') }}</button>
+
+	{% if is_granted('ROLE_ADMIN') %}
+		{% if not  fiche.isRejete %}
+			<button class="btn btn-danger " value="rejeter" name="rejeter">
+				<span class="fa fa-download"></span>
+				{{ button_label|default('Rejeter') }}</button>
+		{% endif %}
+	{% endif %}
+	{{ form_end(form) }}
+{% endblock %}

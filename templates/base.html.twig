@@ -1,0 +1,1536 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<title>
+			{% block title %}aXademia::FeuxVert
+			{% endblock %}
+		</title>
+		<meta name="description" content="Plateforme academique informatisant le processus complet de gestion des mémoires: de la proposition des sujet à l'alignement pour la defense, le tout en passant par les depots successifs et corrections.">
+		<meta name="keywords" content="Redaction, Mémoires , travail de fin de cycle, qualité ">
+		<meta
+		name="author" content="Marcus R. KIM">
+		<!-- icone -->
+		<link
+		href="{{asset('images/faviconFeuxVert.png')}}" rel="icon">
+		<!-- Google Font: Source Sans Pro -->
+		<link
+		rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+		<!-- Font Awesome -->
+		<link
+		rel="stylesheet" href="{{asset('plugins/fontawesome-free/css/all.min.css')}}">
+
+		<!-- DataTables -->
+		<link rel="stylesheet" href="{{asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css')}}">
+		<link rel="stylesheet" href="{{asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css')}}">
+		<link
+		rel="stylesheet" href="{{asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css')}}">
+		<!-- Ionicons -->
+		<link
+		rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+		<!-- Tempusdominus Bootstrap 4 -->
+		<link
+		rel="stylesheet" href="{{asset('plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css')}}">
+		<!-- iCheck -->
+		<link
+		rel="stylesheet" href="{{asset('plugins/icheck-bootstrap/icheck-bootstrap.min.css')}}">
+		<!-- Select2 -->
+		<link rel="stylesheet" href="{{asset('plugins/select2/css/select2.min.css')}}">
+		<link
+		rel="stylesheet" href="{{asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
+
+		<!-- JQVMap -->
+		<link
+		rel="stylesheet" href="{{asset('plugins/jqvmap/jqvmap.min.css')}}">
+		<!-- Theme style -->
+		<link rel="stylesheet" href="{{asset('dist/css/adminlte.min.css')}}">
+		{# <link rel="stylesheet" href="{{asset('build/scss/adminlte.scss')}}"> #}
+		<!-- overlayScrollbars -->
+		<link
+		rel="stylesheet" href="{{asset('plugins/overlayScrollbars/css/OverlayScrollbars.min.css')}}"> <!-- Daterange picker -->
+		<link
+		rel="stylesheet" href="{{asset('plugins/daterangepicker/daterangepicker.css')}} ">
+
+		<!-- summernote -->
+		<link rel="stylesheet" href="{{asset('plugins/summernote/summernote-bs4.min.css')}}">
+		<link rel="stylesheet" href="{{asset('dist/css/accordion.css')}}">
+		{% if is_granted('ROLE_ADMIN') %}
+			<link rel="stylesheet" href="{{asset('dist/css/styleAdmin.css')}}">
+		{% endif %}
+		{% if is_granted('ROLE_ENSEIGNANT')%}
+			<link rel="stylesheet" href="{{asset('dist/css/styleEnseignant.css')}}">
+		{% endif %}
+		{% if is_granted('ROLE_FACULTE')%}
+			<link rel="stylesheet" href="{{asset('dist/css/styleFaculte.css')}}">
+		{% endif %}
+		{% if is_granted('ROLE_FINANCIER')%}
+			<link rel="stylesheet" href="{{asset('dist/css/styleFinance.css')}}">
+		{% endif %}
+		{% if is_granted('ROLE_FINALISTE')%}
+			<link rel="stylesheet" href="{{asset('dist/css/styleFinaliste.css')}}">
+		{% endif %}
+		<link rel="stylesheet" href="{{asset('dist/css/academia.css')}}"> {% block stylesheets %}{% endblock %}
+		<style>
+			.select2: {
+				width: 100%;
+			}
+		</style>
+	</head>
+	<body class="hold-transition sidebar-mini layout-fixed {% if is_granted('ROLE_ADMIN')%} dark-mode {% endif %}">
+
+		<div
+			class="wrapper">
+
+			<!-- Preloader -->
+			<div
+				class="preloader flex-column justify-content-center align-items-center">{#% if entreprise %}
+																																																																																																																																		{% if entreprise.logo %}
+																																																																																																																																			<img class="animation__shake" src="{{asset('images/logofeuxvert1.jpg')}}" alt="Axademia::Feux vert" height="60" width="60">
+																																																																																																																																		{#% endif %}
+																																																																																																																																	{% endif %#}
+			</div>
+
+			<!-- Navbar -->
+			<nav
+				class="main-header navbar navbar-expand  navbar-light {% if is_granted('ROLE_ADMIN') %} navbar-dark {% else %} navbar-white {% endif %}">
+				<!-- Left navbar links -->
+				<ul class="navbar-nav">
+					<li class="nav-item">
+						<a class="nav-link" data-widget="pushmenu" href="#" role="button">
+							<i class="fas fa-bars"></i>
+						</a>
+					</li>
+					<li class="nav-item d-none d-sm-inline-block">
+						<a href="{{url('accueil')}}" class="nav-link">Portail</a>
+					</li>
+					{% if is_granted('ROLE_IT') %}
+						<li class="nav-item d-none d-sm-inline-block">
+							<a href="{{url('entreprise_new')}}" class="nav-link">Infos Institutions
+							</a>
+						</li>
+						<li class="nav-item d-none d-sm-inline-block">
+							<a href="{{url('faculte_new')}}" class="nav-link">Facultés</a>
+						</li>
+						<li class="nav-item d-none d-sm-inline-block">
+							<a href="{{url('annee_academique_new')}}" class="nav-link">Année academique</a>
+						</li>
+						<li class="nav-item dropdown no-arrow d-none d-sm-inline-block">
+							<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<span>Gérer users
+								</span>
+							</a>
+							<!-- Dropdown - User Information -->
+							<div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+								<a title="Nouveau Paiement  pour dépot de mémoire" class="dropdown-item" href="{{url('app_register_fac')}}">
+									<i class="fa fa-graduation-cap fa-sm fa-fw mr-2 text-gray-400"></i>
+									admin de faculté
+								</a>
+								<div class="dropdown-divider"></div>
+								<a title="Liste de paiements" class="dropdown-item" href="{{url('app_register_sa')}}">
+									<i class="fa fa-graduation-cap fa-sm fa-fw mr-2 text-gray-400"></i>
+									super admin
+								</a>
+							</div>
+						</li>
+					{% endif %}
+
+					{% if is_granted('ROLE_FINALISTE') %}
+						{% if app.user.finaliste %}
+							{% if app.user.finaliste.fiche %}
+								{% if app.user.finaliste.fiche.isPlanifiee %}
+									<li class="nav-item bg-danger d-none d-sm-inline-block">
+										<a title="Nouvelle fiche" href="{{url('planification_index')}}" class="nav-link">
+											Voir planification
+										</a>
+									</li>
+								{% endif %}
+							{% endif %}
+							{% if not app.user.finaliste.fiche %}
+								<li class="nav-item bg-danger d-none d-sm-inline-block">
+									<a title="Nouvelle fiche" href="{{url('fiche_new')}}" class="nav-link">
+										Proposer sujet
+									</a>
+								</li>
+							{% else %}
+								<li class="nav-item d-none d-sm-inline-block">
+									<a href="{{url('fiche_show',{'id': app.user.finaliste.fiche.id })}}" class="nav-link" title="Voir la fiche">Fiche</a>
+								</li>
+							{% endif %}
+							{% if app.user.finaliste.fiche %}
+								{% if  app.user.finaliste.fiche.etatFiche == 3 %}
+									<li class="nav-item d-none d-sm-inline-block">
+										<a href="{{url('depot_new')}}" class="nav-link bg-danger">Déposer travail
+										</a>
+									</li>
+								{% endif %}
+							{% endif %}
+						{% endif %}
+					{% endif %}
+					{% if is_granted('ROLE_FINANCIER') or is_granted('ROLE_ADMIN') %}
+						<li class="nav-item dropdown no-arrow d-none d-sm-inline-block">
+							<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<span>Gérer paiement
+								</span>
+							</a>
+							<!-- Dropdown - User Information -->
+							<div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+								<a title="Nouveau Paiement  pour dépot de mémoire" class="dropdown-item" href="{{url('paiement_depot_creation')}}">
+									<i class="fa fa-graduation-cap fa-sm fa-fw mr-2 text-gray-400"></i>
+									Nouveau Paiement
+								</a>
+								<div class="dropdown-divider"></div>
+								<a title="Liste de paiements" class="dropdown-item" href="{{url('paiement_depot_index')}}">
+									<i class="fa fa-graduation-cap fa-sm fa-fw mr-2 text-gray-400"></i>
+									Liste de paiements
+								</a>
+							</div>
+						</li>
+					{% endif %}
+					{% if is_granted('ROLE_ADMIN') %}
+						<li class="nav-item dropdown no-arrow d-none d-sm-inline-block">
+							<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<span>Gérer defenses
+								</span>
+							</a>
+							<!-- Dropdown - User Information -->
+							<div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+								<a title="Mémoires" class="dropdown-item" href="{{url('planification_index')}}">
+									<i class="fa fa-graduation-cap fa-sm fa-fw mr-2 text-gray-400"></i>
+									Liste des Planifications
+								</a>
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" href="{{url('planification_new')}}">
+									<i class="fas fa-graduation-cap fa-sm fa-fw mr-2 text-gray-400"></i>
+									Nouvelle planification
+								</a>
+								{# <div class="dropdown-divider"></div>
+																																																																																<a title="Nouvelle affectation des directeurs" class="dropdown-item" href="{{url('ligne_planification_index')}}">
+																																																																																	<i class="fas fa-graduation-cap fa-sm fa-fw mr-2 text-gray-400"></i>
+																																																																																	Nouvelle lecture mémoire
+																																																																																</a> #}
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" href="{{url('fiche_index', {'id': 2 }) }}" title="Notifier les défenses éffectuées">
+									<i class="fas fa-graduation-cap fa-sm fa-fw mr-2 text-gray-400"></i>
+									Notifier défense
+								</a>
+								{# <div class="dropdown-divider"></div>
+																																																																																<a class="dropdown-item" href="{{url('planification_new_defendu')}}">
+																																																																																	<i class="fas fa-graduation-cap fa-sm fa-fw mr-2 text-gray-400"></i>
+																																																																																	Affecter directions
+																																																																																</a> #}
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" href="{{url('cloture_new')}}">
+									<i class="fas fa-graduation-cap fa-sm fa-fw mr-2 text-gray-400"></i>
+									Clôturer fiche
+								</a>
+							</div>
+						</li>
+						<li class="nav-item dropdown no-arrow d-none d-sm-inline-block">
+							<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<span>Gérer Fiches
+								</span>
+							</a>
+							<!-- Dropdown - User Information -->
+							<div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+								<a class="dropdown-item" href="{{url('fiche_index_non_traitees')}}">
+									<i class="fas fa-graduation-cap fa-sm fa-fw mr-2 text-gray-400"></i>
+									Traiter fiches
+								</a>
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" href="{{url('fiche_index_non_soumises')}}">
+									<i class="fa fa-graduation-cap fa-sm fa-fw mr-2 text-gray-400"></i>
+									Fiches non soumises
+								</a>
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" href="{{url('fiche_index_traitees')}}">
+									<i class="fa fa-graduation-cap fa-sm fa-fw mr-2 text-gray-400"></i>
+									Fiches traitées
+								</a>
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" href="{{url('cloture_index')}}">
+									<i class="fa fa-graduation-cap fa-sm fa-fw mr-2 text-gray-400"></i>
+									Fiches clôturées
+								</a>
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" href="{{url('fiche_index')}}">
+									<i class="fa fa-graduation-cap fa-sm fa-fw mr-2 text-gray-400"></i>
+									Toutes les Fiches
+								</a>
+							</div>
+						</li>
+						<li class="nav-item dropdown no-arrow d-none d-sm-inline-block">
+							<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<span>Configurations
+								</span>
+							</a>
+							<!-- Dropdown - User Information -->
+							<div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+								<a class="dropdown-item" href="{{url('departement_new')}}">
+									<i class="fas fa-graduation-cap fa-sm fa-fw mr-2 text-gray-400"></i>
+									Départements
+								</a>
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" href="{{url('promotion_new')}}">
+									<i class="fa fa-graduation-cap fa-sm fa-fw mr-2 text-gray-400"></i>
+									Promototions
+								</a>
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" href="{{url('app_register_enseignant')}}">
+									<i class="fa fa-graduation-cap fa-sm fa-fw mr-2 text-gray-400"></i>
+									Créer enseignants
+								</a>
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" href="{{url('app_register_finaliste')}}">
+									<i class="fa fa-graduation-cap fa-sm fa-fw mr-2 text-gray-400"></i>
+									Créer finalistes
+								</a>
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" href="{{url('app_register_fac')}}">
+									<i class="fa fa-graduation-cap fa-sm fa-fw mr-2 text-gray-400"></i>
+									Créer ADFAC
+								</a>
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" href="{{url('salle_new')}}">
+									<i class="fa fa-graduation-cap fa-sm fa-fw mr-2 text-gray-400"></i>
+									Créer salles
+								</a>
+							</div>
+						</li>
+					{% endif %}
+					{% if is_granted('ROLE_ENSEIGNANT') %}
+						<li class="nav-item dropdown no-arrow d-none d-sm-inline-block">
+							<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<span>Dépot
+								</span>
+							</a>
+							<!-- Dropdown - User Information -->
+							<div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+								<a class="dropdown-item" href="{{url('depot_index_non_corrige')}}">
+									<i class="fa fa-graduation-cap fa-sm fa-fw mr-2 text-gray-400"></i>
+									Dépots non-lus
+									{% if app.user.enseignant %}
+										{% if app.user.enseignant.nombreNouveaudepot %}
+											<span class="badge badge-info">
+												{{app.user.enseignant.nombreNouveaudepot}}
+											</span>
+										{% endif %}
+									{% endif %}
+								</a>
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" href="{{url('depot_recherche_index')}}">
+									<i class="fas fa-graduation-cap fa-sm fa-fw mr-2 text-gray-400"></i>
+									Rechercher dépot
+								</a>
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" href="{{url('depot_index')}}">
+									<i class="fa fa-graduation-cap fa-sm fa-fw mr-2 text-gray-400"></i>
+									Tous les dépots
+								</a>
+							</div>
+
+						</li>
+						<li class="nav-item dropdown no-arrow d-none d-sm-inline-block">
+							<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<span>Mes directions
+								</span>
+							</a>
+							<!-- Dropdown - User Information -->
+							<div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+								<a class="dropdown-item" href="{{url('fiche_index_non_feux_vert')}}">
+									<i class="fas fa-graduation-cap fa-sm fa-fw mr-2 text-gray-400"></i>
+									En cours de redaction
+								</a>
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" href="{{url('fiche_index_feux_vert')}}">
+									<i class="fa fa-graduation-cap fa-sm fa-fw mr-2 text-gray-400"></i>
+									Feux verts
+								</a>
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" href="{{url('fiche_index')}}">
+									<i class="fa fa-graduation-cap fa-sm fa-fw mr-2 text-gray-400"></i>
+									Toutes les fiches
+								</a>
+							</div>
+
+						</li>
+						<li class="nav-item dropdown no-arrow d-none d-sm-inline-block">
+							<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<span>Défenses
+								</span>
+							</a>
+							<!-- Dropdown - User Information -->
+							<div
+								class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+								{#<a class="dropdown-item" href="">
+																																																									<i class="fas fa-graduation-cap fa-sm fa-fw mr-2 text-gray-400"></i>
+																																																									Mes lectures
+																																																								</a>
+																																																								<div class="dropdown-divider"></div>#}
+								<a class="dropdown-item" href="{{url('planification_index')}}">
+									<i class="fa fa-graduation-cap fa-sm fa-fw mr-2 text-gray-400"></i>
+									Tous les programmes
+								</a>
+							</div>
+
+						</li>
+					{% endif %}
+
+
+				</ul>
+
+				<!-- Right navbar links -->
+				<ul
+					class="navbar-nav ml-auto">
+					<!-- Navbar Search -->
+					{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_ENSEIGNANT') %}
+						<li class="nav-item">
+							<a class="nav-link" data-widget="navbar-search" href="#" role="button">
+								<i class="fas fa-search"></i>
+							</a>
+							<div class="navbar-search-block">
+								<form class="form-inline" action="{{url('search_fiche_by_numero')}}">
+									<div class="input-group input-group-sm">
+										<input name="numero" class="form-control form-control-navbar" type="search" placeholder="Rechercher une fiche en entrant le nom de l'étudiant" aria-label="Search">
+										<div class="input-group-append">
+											<button class="btn btn-navbar" type="submit">
+												<i class="fas fa-search"></i>
+											</button>
+											<button class="btn btn-navbar" type="button" data-widget="navbar-search">
+												<i class="fas fa-times"></i>
+											</button>
+										</div>
+									</div>
+								</form>
+							</div>
+						</li>
+					{% endif %}
+					<!-- Notifications Dropdown Menu -->
+					{% if is_granted('ROLE_ADMIN') %}
+						{% if app.user.faculte %}
+							{% set nombreFac = app.user.faculte.nombreFicheATraiter + app.user.faculte.nombreFicheDefendu + app.user.faculte.nombreFicheFeuxVert %}
+							<li class="nav-item dropdown">
+								<a class="nav-link" data-toggle="dropdown" href="#">
+									<i class="far fa-bell"></i>
+									{% if nombreFac > 0 %}
+										<span class="badge badge-success navbar-badge">
+											{{nombreFac }}
+										</span>
+									{% else %}
+										<span class="badge badge-default bg-gray  navbar-badge">
+											{{nombreFac }}
+										</span>
+									{% endif %}
+
+								</a>
+								<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+									{% if nombreFac == 0 %}
+										<span class="dropdown-item dropdown-header">
+											{{nombreFac }}
+											Notification
+										</span>
+									{% endif %}
+
+									{% set nombreFicheATraiter=app.user.faculte.nombreFicheATraiter %}
+									{% if nombreFicheATraiter>0 %}
+										<div class="dropdown-divider"></div>
+										<a href="{{url('fiche_index_non_traitees')}}" class="dropdown-item">
+											<i class="fas fa-envelope text-success mr-2"></i>
+											{{nombreFicheATraiter}}
+											nouvelles soumissions
+										</a>
+									{% endif %}
+
+									{% set nombreFicheFeuxVert = app.user.faculte.nombreFicheFeuxVert %}
+									{% if nombreFicheFeuxVert >0 %}
+										<div class="dropdown-divider"></div>
+										<a href="{{url('planification_new')}}" class="dropdown-item">
+											<i class="fa fa-fire text-success mr-2"></i>
+											{{ nombreFicheFeuxVert }}
+											feux verts en attente alignement
+										</a>
+									{% endif %}
+
+									{% set nombreFicheDefendu = app.user.faculte.nombreFicheDefendu %}
+									{% if nombreFicheDefendu > 0 %}
+										<div class="dropdown-divider"></div>
+										<a href="{{url('fiche_index')}}" class="dropdown-item">
+											<i class="fas fa-graduation-cup text-success  mr-2"></i>
+											{{app.user.faculte.nombreFicheDefendu}}
+											défenses en attente classement
+										</a>
+									{% endif %}
+
+								</div>
+
+							</li>
+						{% endif %}
+						<!-- Fin du controle de faculte user -->
+					{% endif %}
+
+
+					{% if is_granted('ROLE_ENSEIGNANT') %}
+						<li class="nav-item dropdown">
+							<a class="nav-link" data-toggle="dropdown" href="#">
+								<i class="far fa-bell"></i>
+								{% if app.user.enseignant %}
+									{% set nombre = app.user.enseignant.nombreDirection + app.user.nombreMessageNonLu + app.user.enseignant.nombreNouveaudepot %}
+									{% if nombre > 0 %}
+										<span class="badge badge-success  navbar-badge">
+											{{ nombre }}
+										</span>
+									{% else %}
+										<span class="badge badge-default bg-gray navbar-badge">
+											{{ nombre }}
+										</span>
+									{% endif %}
+								{% endif %}
+							</a>
+
+							<div
+								class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+								{# les lignes ci-dessous commentés doivent etre revues  #}
+								{% if app.user.enseignant %}
+									{% set nombre = app.user.enseignant.nombreDirection + app.user.nombreMessageNonLu + app.user.enseignant.nombreNouveaudepot %}
+									{% if nombre == 0 %}
+										<span class="dropdown-item dropdown-header">
+											{% if app.user.enseignant %}
+												{{nombre}}
+											{% endif %}
+											Notification
+										</span>
+									{% endif %}
+								{% endif %}
+								{% if app.user.enseignant %}
+									{% if app.user.enseignant.nombreDirection > 0 %}
+										<div class="dropdown-divider"></div>
+										<a href="{{url('fiche_index')}}" class="dropdown-item">
+											<i class="fas fa-suitcase text-success mr-2"></i>
+											{{app.user.enseignant.nombreDirection}}
+											nouvelle{{app.user.enseignant.nombreDirection>1? 's':''}}
+											direction{{app.user.enseignant.nombreDirection>1? 's':''}}
+										</a>
+									{% endif %}
+								{% endif %}
+
+								{% if app.user.enseignant %}
+									{% if app.user.nombreMessageNonLu > 0 %}
+										<div class="dropdown-divider"></div>
+										<a href="{{url('message_index')}}" class="dropdown-item">
+											<i class="fas fa-comments text-primary mr-2"></i>
+											{{app.user.nombreMessageNonLu}}
+											nouveau{{app.user.nombreMessageNonLu >1? 'x':''}}
+											message{{app.user.nombreMessageNonLu >1? 's':''}}
+										</a>
+									{% endif %}
+								{% endif %}
+
+								{% if app.user.enseignant %}
+									{% if app.user.enseignant.nombreNouveaudepot > 0 %}
+										<div class="dropdown-divider"></div>
+										<a href="{{url('depot_index_non_corrige')}}" class="dropdown-item">
+											<i class="fas fa-folder text-danger mr-2"></i>
+											{% if app.user.enseignant.nombreNouveaudepot %}
+												<span class="badge badge-info">
+													{{app.user.enseignant.nombreNouveaudepot}}
+												</span>
+											{% else %}
+												0
+											{% endif %}
+											dépot{{app.user.enseignant.nombreNouveaudepot>1? 's':'' }}
+											non lu{{app.user.enseignant.nombreNouveaudepot>0? 's':'' }}
+										</a>
+									{% endif %}
+								{% endif %}
+
+							</div>
+						</li>
+					{% endif %}
+
+					{% if is_granted('ROLE_FINALISTE') %}
+						{% if app.user.finaliste %}
+							{% if app.user.finaliste.fiche %}
+								<li class="nav-item dropdown">
+									<a class="nav-link" data-toggle="dropdown" href="#">
+										{{ include('_etatFiche.html.twig') }}
+										<i class="fa fa-bus"></i>
+									</a>
+								</li>
+
+							{% endif %}
+						{% endif %}
+					{% endif %}
+
+					{% if is_granted('ROLE_FINALISTE') %}
+						<li class="nav-item dropdown">
+							<a class="nav-link" data-toggle="dropdown" href="#">
+								<i class="far fa-bell"></i>
+								{% if app.user.finaliste %}
+									{% set compteurFinaliste = app.user.finaliste.nombreCorrectionDirecteur + app.user.nombreMessageNonLu  %}
+									{% if compteurFinaliste > 0 %}
+										<span class="badge badge-success navbar-badge">
+											{{compteurFinaliste }}
+										</span>
+									{% else %}
+										<span class="badge badge-default bg-gray  navbar-badge">
+											{{compteurFinaliste }}
+										</span>
+									{% endif %}
+								{% endif %}
+							</a>
+
+							{% if app.user.finaliste %}
+								<div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+									{% if compteurFinaliste== 0  %}
+										<span class="dropdown-item dropdown-header">
+											{{compteurFinaliste}}
+											Notification
+										</span>
+									{% endif %}
+
+									{% if app.user.finaliste.nombreCorrectionDirecteur > 0 %}
+										<div class="dropdown-divider"></div>
+										<a href="{{url('depot_index')}}" class="dropdown-item">
+											<i class="fas fa-eraser text-success mr-2"></i>
+											{{app.user.finaliste.nombreCorrectionDirecteur}}
+											nouvelles corrections du Directeur
+										</a>
+									{% endif %}
+
+									{% if app.user.nombreMessageNonLu > 0  %}
+										<div class="dropdown-divider"></div>
+										<a href="{{url('message_index')}}" class="dropdown-item">
+											<i class="fas fa-comments mr-2"></i>
+											{{app.user.nombreMessageNonLu}}
+											nouveau{{app.user.nombreMessageNonLu >1? 'x':''}}
+											message{{app.user.nombreMessageNonLu >1? 's':''}}
+										</a>
+									{% endif %}
+
+								</div>
+							{% endif %}
+						</li>
+					{% endif %}
+					{% if app.user %}
+						<!-- Nav Item - User Information -->
+						<li class="nav-item dropdown no-arrow">
+							<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<span class="mr-2 d-none d-lg-inline text-gray-600 small">
+									Bjr
+									{{ app.user.username|title }}</span>
+								<img class="img-profile rounded-circle" src="{{asset('dist/img/avatar3.png')}}" width="28em">
+							</a>
+							<!-- Dropdown - User Information -->
+							<div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+								{% if is_granted('ROLE_FINALISTE') %}
+									{% if app.user.finaliste %}
+										<a class="dropdown-item" href="{{ path('profile', {'id': app.user.id}) }}">
+											<i class="fa fa-graduation-cap fa-sm fa-fw mr-2 text-gray-400"></i>
+											Voir mon profile
+										</a>
+									{% endif %}
+								{% endif %}
+								{% if is_granted('ROLE_ENSEIGNANT') %}
+									{% if app.user.enseignant %}
+										<a class="dropdown-item" href="{{ path('profile', {'id': app.user.id}) }}">
+											<i class="fa fa-graduation-cap fa-sm fa-fw mr-2 text-gray-400"></i>
+											Voir mon profile
+										</a>
+									{% endif %}
+								{% endif %}
+								{% if is_granted('ROLE_IT') %}
+									<a class="dropdown-item" href="{{ path('faculte_choix') }}">
+										<i class="fa fa-graduation-cap fa-sm fa-fw mr-2 text-gray-400"></i>
+										Naviguer Faculté
+									</a>
+								{% endif %}
+								{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_IT') %}
+									<a class="dropdown-item" href="{{ path('profile', {'id': app.user.id}) }}">
+										<i class="fa fa-graduation-cap fa-sm fa-fw mr-2 text-gray-400"></i>
+										Voir mon profile
+									</a>
+								{% endif %}
+								{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_ENSEIGNANT') %}
+									<div class="dropdown-divider"></div>
+									<a class="dropdown-item" href="{{url('broadcast_message_new')}}">
+										<i class="fas fa-envelope fa-sm fa-fw mr-2  "></i>
+										Envoyer Broadcasts
+									</a>
+									<div class="dropdown-divider"></div>
+									<a class="dropdown-item" href="{{url('broadcast_message_index')}}">
+										<i class="fas fa-envelope fa-sm fa-fw mr-2 "></i>
+										Voir Broadcasts
+									</a>
+								{% endif %}
+								<div class="dropdown-divider"></div>
+								<a class="dropdown-item" href="{{url('app_logout')}}">
+									<i class="fas fa-power-off fa-sm fa-fw mr-2 text-danger "></i>
+									Déconnexion
+								</a>
+							</div>
+						</li>
+					{% endif %}
+				</ul>
+			</nav>
+			<!-- /.navbar -->
+
+			<!-- Main Sidebar Container -->
+			<aside
+				class="main-sidebar sidebar-dark-primary elevation-4">
+				<!-- Brand Logo -->
+				<a href="{{url('accueil')}}" class="brand-link">
+					<img src="{{asset('images/logofeuxvert1.jpg')}}" alt="Axademia Feux vert" class="brand-image img-circle elevation-3" style="opacity: .8">
+					<span class="brand-text font-weight-light">aXademia::F.V</span>
+				</a>
+
+				<!-- Sidebar -->
+				<div
+					class="sidebar">
+					<!-- Sidebar user panel (optional) -->
+					{% if app.user %}
+						<!-- Sidebar user panel (optional) -->
+						<div class="user-panel mt-3 pb-3 mb-3 d-flex">
+							<div class="image">
+								<img src="{{asset('dist/img/avatar3.png')}}" class="img-circle elevation-2" alt="User Image">
+							</div>
+							<div title='Déconnectez-vous!' class="info">
+								<a href="{{url('app_logout')}}" class="d-block">
+									{{app.user.username|title}}
+									est connecté(e)
+								</a>
+							</div>
+						</div>
+					{% endif %}
+
+					<!-- SidebarSearch Form -->
+					<div class="form-inline">
+						<div class="input-group" data-widget="sidebar-search">
+							<input class="form-control form-control-sidebar" type="search" placeholder="Chercher fonctionnalités" aria-label="Search">
+							<div class="input-group-append">
+								<button class="btn btn-sidebar">
+									<i class="fas fa-search fa-fw"></i>
+								</button>
+							</div>
+						</div>
+					</div>
+					<!-- Sidebar Menu -->
+					<nav class="mt-2">
+						<ul
+							class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+							<!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
+							{% if is_granted('ROLE_IT') %}
+								<li class="nav-item">
+									<a href="{{url('entreprise_new')}}" class="nav-link">
+										<i class="nav-icon fa fa-graduation-cap"></i>
+										<p>
+											Infos université
+										</p>
+									</a>
+								</li>
+								<li class="nav-item">
+									<a href="{{url('faculte_new')}}" class="nav-link">
+										<i class="nav-icon fa fa-graduation-cap"></i>
+										<p>
+											Facultés
+										</p>
+									</a>
+								</li>
+								<li class="nav-item">
+									<a href="{{url('app_register_fac')}}" class="nav-link">
+										<i class="nav-icon fa fa-graduation-cap"></i>
+										<p>
+											Créer admin de faculté
+										</p>
+									</a>
+								</li>
+								<li class="nav-item">
+									<a href="{{url('app_register_sa')}}" class="nav-link">
+										<i class="nav-icon fa fa-graduation-cap"></i>
+										<p>
+											Créer super admin
+										</p>
+									</a>
+								</li>
+								<li class="nav-item">
+									<a href="{{url('annee_academique_new')}}" class="nav-link">
+										<i class="nav-icon fa fa-graduation-cap"></i>
+										<p>
+											Créer année academique
+										</p>
+									</a>
+								</li>
+							{% endif %}
+							{% if is_granted('ROLE_ADMIN') %}
+								<li class="nav-item menu-close">
+									<a href="#" class="nav-link active">
+										<i class="nav-icon fa fa-hashtag"></i>
+										<p>
+											Configurations
+											<i class="right fas fa-angle-left"></i>
+										</p>
+									</a>
+									<ul class="nav nav-treeview">
+										<li class="nav-item">
+											<a href="{{url('departement_new')}}" class="nav-link">
+												<i class="fa fa-graduation-cap nav-icon"></i>
+												<p>Départements</p>
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="{{url('promotion_new')}}" class="nav-link">
+												<i class="fa fa-graduation-cap nav-icon"></i>
+												<p>Promotion</p>
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="{{url('user_index')}}" class="nav-link ">
+												<i class="fa fa-graduation-cap nav-icon"></i>
+												<p>Tous les utilisateurs</p>
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="{{url('app_register_enseignant')}}" class="nav-link ">
+												<i class="far fa-user nav-icon"></i>
+												<p>Créer des enseignants
+												</p>
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="{{url('app_register_finaliste')}}" class="nav-link ">
+												<i class="far fa-user nav-icon"></i>
+												<p>Créer des finalistes
+												</p>
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="{{url('app_register_fac')}}" class="nav-link ">
+												<i class="far fa-user nav-icon"></i>
+												<p>Créer admin de fac
+												</p>
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="{{url('salle_new')}}" class="nav-link ">
+												<i class="far fa-user nav-icon"></i>
+												<p>Créer salles
+												</p>
+											</a>
+										</li>
+										{# <li class="nav-item">
+																																																																																																																									<a href="{{url('app_register')}}" class="nav-link ">
+																																																																																																																										<i class="far fa-user nav-icon"></i>
+																																																																																																																										<p>Créer des utilisateurs
+																																																																																																																										</p>
+																																																																																																																									</a>
+																																																																																																																								</li> #}
+
+
+									</ul>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link">
+										<i class="nav-icon fa fa-hashtag"></i>
+										<p>
+											Gérer défenses
+											<i class="fas fa-angle-left right"></i>
+										</p>
+									</a>
+									<ul class="nav nav-treeview">
+										<li class="nav-item">
+											<a href="{{url('planification_index')}}" class="nav-link">
+												<i class="fa fa-graduation-cap nav-icon"></i>
+												<p>Liste planification</p>
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="{{url('planification_new')}}" class="nav-link">
+												<i class="fa fa-graduation-cap nav-icon"></i>
+												<p>Nouvelle planification</p>
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="{{url('ligne_planification_index')}}" class="nav-link">
+												<i class="fa fa-graduation-cap nav-icon"></i>
+												<p>Notifier défenses
+												</p>
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="{{url('cloture_index')}}" class="nav-link">
+												<i class="fa fa-graduation-cap nav-icon"></i>
+												<p>Cloturer fiches
+												</p>
+											</a>
+										</li>
+									</ul>
+								</li>
+								<li class="nav-item">
+									<a href="#" class="nav-link">
+										<i class="nav-icon fa fa-hashtag"></i>
+										<p>
+											Fiches
+											<i class="fas fa-angle-left right"></i>
+										</p>
+									</a>
+									<ul class="nav nav-treeview">
+										<li class="nav-item">
+											<a href="{{url('fiche_index_non_traitees')}}" class="nav-link">
+												<i class="fa fa-graduation-cap nav-icon"></i>
+												<p>Traiter Fiches
+												</p>
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="{{url('fiche_index_non_soumises')}}" class="nav-link">
+												<i class="fa fa-graduation-cap nav-icon"></i>
+												<p>Fiches non soumises
+												</p>
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="{{url('fiche_index_traitees')}}" class="nav-link">
+												<i class="fa fa-graduation-cap nav-icon"></i>
+												<p>Fiches  traitées</p>
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="{{url('fiche_index')}}" class="nav-link">
+												<i class="fa fa-graduation-cap nav-icon"></i>
+												<p>Toutes les fiches
+												</p>
+											</a>
+										</li>
+									</ul>
+								</li>
+								<li class="nav-item">
+									<a href="#" class="nav-link">
+										<i class="nav-icon fas fa-search"></i>
+										<p>
+											Fiches par promotion
+											<i class="fas fa-angle-left right"></i>
+										</p>
+									</a>
+									<ul class="nav nav-treeview">
+										{% for promotion in promotions %}
+											<li class="nav-item">
+												<a href="{{ path('fiche_index', {'prom': promotion.id}) }}" class="nav-link">
+													<i class="fa fa-graduation-cap nav-icon"></i>
+													<p>{{promotion}}
+													</p>
+												</a>
+											</li>
+										{% endfor %}
+
+									</ul>
+								</li>
+							{% endif %}
+							{% if is_granted('ROLE_ENSEIGNANT') %}
+								<li class="nav-item">
+									<a href="#" class="nav-link">
+										<i class="nav-icon fa fa-hashtag"></i>
+										<p>
+											Dépots
+											<i class="fas fa-angle-left right"></i>
+										</p>
+									</a>
+									<ul class="nav nav-treeview">
+										<li class="nav-item">
+											<a href="{{url('depot_index_non_corrige')}}" class="nav-link">
+												<i class="fa fa-graduation-cap nav-icon"></i>
+												<p>Dépot non-corrigés
+												</p>
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="{{url('depot_recherche_index')}}" class="nav-link">
+												<i class="fa fa-graduation-cap nav-icon"></i>
+												<p>Rechercher dépot
+												</p>
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="{{url('depot_index')}}" class="nav-link">
+												<i class="fa fa-graduation-cap nav-icon"></i>
+												<p>Tous les Dépots
+												</p>
+											</a>
+										</li>
+									</ul>
+								</li>
+								<li class="nav-item">
+									<a href="#" class="nav-link">
+										<i class="nav-icon fa fa-hashtag"></i>
+										<p>
+											Mes directions
+											<i class="fas fa-angle-left right"></i>
+										</p>
+									</a>
+									<ul class="nav nav-treeview">
+										<li class="nav-item">
+											<a href="" class="nav-link">
+												<i class="fa fa-graduation-cap nav-icon"></i>
+												<p>En cours de redaction
+												</p>
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="{#{}#}" class="nav-link">
+												<i class="fa fa-graduation-cap nav-icon"></i>
+												<p>feux verts
+												</p>
+											</a>
+										</li>
+										<li class="nav-item">
+											<a href="{#{}#}" class="nav-link">
+												<i class="fa fa-graduation-cap nav-icon"></i>
+												<p>Toutes les fiches
+												</p>
+											</a>
+										</li>
+									</ul>
+								</li>
+								<li class="nav-item">
+									<a href="{{url('fiche_index_traitees')}}" class="nav-link">
+										<i class="nav-icon fa fa-hashtag"></i>
+										<p>
+											Défenses
+											<i class="fas fa-angle-left right"></i>
+										</p>
+									</a>
+									<ul class="nav nav-treeview">
+										<li class="nav-item">
+											<a href="{{url('planification_index')}}" class="nav-link">
+												<i class="fa fa-graduation-cap nav-icon"></i>
+												<p>Tous le programme
+												</p>
+											</a>
+										</li>
+									</ul>
+								</li>
+							{% endif %}
+
+							{% if is_granted('ROLE_FINALISTE') %}
+								{% if app.user.finaliste %}
+									{% if app.user.finaliste.fiche %}
+										{% if app.user.finaliste.fiche.isPlanifiee %}
+											<li class="nav-item">
+												<a title="mon programme de défense" href="{{url('planification_index')}}" class="nav-link bg-danger ">
+													<i class="nav-icon fa fa-graduation-cap"></i>
+													<p>
+														Voir planification
+													</p>
+												</a>
+											</li>
+										{% endif %}
+									{% endif %}
+									{% if app.user.finaliste.fiche==null %}
+										<li class="nav-item">
+											<a title="Nouvelle fiche" href="{{url('fiche_new')}}" class="nav-link bg-danger ">
+												<i class="nav-icon fa fa-graduation-cap"></i>
+												<p>
+													Proposer sujet
+												</p>
+											</a>
+										</li>
+									{% else %}
+										<li class="nav-item">
+											<a href="{{url('fiche_index')}}" class="nav-link">
+												<i class="nav-icon fa fa-graduation-cap"></i>
+												<p>
+													Voir Fiche
+												</p>
+											</a>
+										</li>
+									{% endif %}
+									{% if app.user.finaliste.fiche %}
+										{% if  app.user.finaliste.fiche.etatFiche == 3 %}
+											<li class="nav-item">
+												<a href="{{url('depot_new')}}" class="nav-link bg-danger">
+													<i class="nav-icon fa fa-graduation-cap"></i>
+													<p>
+														Déposer travail
+													</p>
+												</a>
+											</li>
+										{% endif %}
+									{% endif %}
+								{% endif %}
+
+							{% endif %}
+							{% if is_granted('ROLE_FINALISTE') or is_granted('ROLE_ENSEIGNANT') %}
+								<li class="nav-item">
+									<a href="{{url('message_index')}}" class="nav-link {% if app.user.nombreMessageNonLu > 0 %} bg-danger {% endif %}">
+										<i class="nav-icon fa fa-graduation-cap"></i>
+										<p>
+											Consulter messages
+										</p>
+									</a>
+								</li>
+							{% endif %}
+							<li class="nav-item">
+								<a href="{{url('planification_index')}}" class="nav-link">
+									<i class="nav-icon far fa-calendar-alt"></i>
+									<p>
+										Programmes défénses
+									</p>
+								</a>
+							</li>
+							<li class="nav-header">
+								{% if entreprise %}
+									{% if entreprise.id %}
+										<a href="{{url('entreprise_show',{'id':entreprise.id})}}">{{entreprise.nom|title}}
+										</a>
+									{% endif %}
+								{% endif %}
+
+							</li>
+							{% if entreprise %}
+								{% if entreprise.logo %}
+									<li class="nav-item"><img src="{{asset('uploads/brochures/'~entreprise.logo)}}" width="100%"/>
+									{% endif %}
+								{% endif %}
+							</li>
+						</ul>
+					</nav>
+					<!-- /.sidebar-menu -->
+				</div>
+				<!-- /.sidebar -->
+			</aside>
+
+			<!-- Content Wrapper. Contains page content -->
+			<div
+				class="content-wrapper">
+				<!-- Content Header (Page header) -->
+				<div class="content-header">
+					<div class="container-fluid">
+						<div class="row mb-2">
+							<div class="col-sm-8">
+								<h1
+									class="m-0">
+									{# lien de positionnement #}
+									{% if app.user %}
+										{% if app.user.faculte %}
+
+											<!--span class="fa fa-angle-double-right"> </span-->
+											Faculté :
+											{{ app.user.faculte|title }}
+											{% block positionnement %}
+												<span class="fa fa-angle-double-right"></span>
+												Accueil
+											{% endblock %}
+
+										{% endif %}
+									{% endif %}
+
+								</h1>
+							</div>
+							<!-- /.col -->
+							<div class="col-sm-4">
+								<ol class="breadcrumb float-sm-right">
+									<li class="breadcrumb-item active">
+										<a href="{{url('dashboard')}}">DashBoard</a>
+									</li>
+									{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_IT') %}
+										<li class="breadcrumb-item active">
+											<a href="{{url('user_index')}}">Users</a>
+										</li>
+										<li class="breadcrumb-item active">
+											<a href="{{url('finaliste_index')}}">Finalistes</a>
+										</li>
+									{% endif %}
+
+									{% if is_granted('ROLE_IT') or is_granted('ROLE_ADMIN') or is_granted('ROLE_ENSEIGNANT') %}
+										<li class="breadcrumb-item active">
+											<a href="{{url('enseignant_index')}}">Enseignants</a>
+										</li>
+									{% endif %}
+									{% if is_granted('ROLE_FINALISTE') or is_granted('ROLE_ENSEIGNANT') %}
+										<li class="breadcrumb-item active">::Feux
+											<span class="text-green">vert</span>
+											V1.4</li>
+									{% endif %}
+								</ol>
+							</div>
+							<!-- /.col -->
+						</div>
+						<!-- /.row -->
+					</div>
+					<!-- /.container-fluid -->
+				</div>
+				<!-- /.content-header -->
+				<section class="content">
+					<div class="container-fluid">
+						{% for label, flashes in app.session.flashbag.all %}
+							{% for flash in flashes %}
+								<div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+									<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+									<strong>
+										<!--i class="icon fas fa-ban"></i-->
+										{{ label|title }}
+										!</strong>
+									{{ flash }}
+								</div>
+							{% endfor %}
+						{% endfor %}
+					</div>
+				</section>
+				<!-- Main content -->
+				<section class="content">
+					<div class="container-fluid">
+
+						<!-- /.row -->
+						<!-- Main row -->
+							<div
+							class="row"> <!-- Left col -->
+							<section
+								class="col-lg connectedSortable">
+								<!-- TO DO List -->
+								<div class="card">
+									<div class="card-header">
+										<h3
+											class="card-title">
+											{# <i class="ion ion-clipboard mr-1"></i> #}
+											<span class="fa fa-graduation-cap text-danger"></span>
+											{% block titre %}
+												Axademia feux vert
+											{% endblock %}
+										</h3>
+
+										<div class="card-tools">
+											<div id="smallParent" class="btn-group float-sm-right">
+												{% block lesboutons %}
+													<a title="Retour à la liste " class="btn btn-info">
+														<i class="fa fa-reply-all"></i>
+													</a>
+													<a type="button" title="Ajouter nouveau " class="btn btn-info">
+														<i class="fas fa-plus-circle"></i>
+													</a>
+													<a type="button" title="Modifier élément  " class="btn btn-info">
+														<i class="fas fa-edit"></i>
+													</a>
+													<a type="button" title="Supprimer élément" class="btn btn-info">
+														<i class="fas fa-trash"></i>
+													</a>
+												{% endblock %}
+												<a title="Imprimer la page " onclick="window.print()" class="btn btn-info no-print">
+													<i class="fas fa-print"></i>
+												</a>
+											</div>
+
+										</div>
+									</div>
+									<!-- /.card-header -->
+									<div class="card-body">
+										{% block body %}
+											<ul class="todo-list" data-widget="todo-list">
+												<li>
+													<!-- drag handle -->
+													<span class="handle">
+														<i class="fas fa-ellipsis-v"></i>
+														<i class="fas fa-ellipsis-v"></i>
+													</span>
+													<!-- checkbox -->
+													<div class="icheck-primary d-inline ml-2">
+														<input type="checkbox" value="" name="todo1" id="todoCheck1">
+														<label for="todoCheck1"></label>
+													</div>
+													<!-- todo text -->
+													<span class="text">Design a nice theme</span>
+													<!-- Emphasis label -->
+													<small class="badge badge-danger">
+														<i class="far fa-clock"></i>
+														2 mins</small>
+													<!-- General tools such as edit or delete-->
+													<div class="tools">
+														<i class="fas fa-edit"></i>
+														<i class="fas fa-trash-o"></i>
+													</div>
+												</li>
+												<li>
+													<span class="handle">
+														<i class="fas fa-ellipsis-v"></i>
+														<i class="fas fa-ellipsis-v"></i>
+													</span>
+													<div class="icheck-primary d-inline ml-2">
+														<input type="checkbox" value="" name="todo2" id="todoCheck2" checked>
+														<label for="todoCheck2"></label>
+													</div>
+													<span class="text">Make the theme responsive</span>
+													<small class="badge badge-info">
+														<i class="far fa-clock"></i>
+														4 hours</small>
+													<div class="tools">
+														<i class="fas fa-edit"></i>
+														<i class="fas fa-trash-o"></i>
+													</div>
+												</li>
+												<li>
+													<span class="handle">
+														<i class="fas fa-ellipsis-v"></i>
+														<i class="fas fa-ellipsis-v"></i>
+													</span>
+													<div class="icheck-primary d-inline ml-2">
+														<input type="checkbox" value="" name="todo3" id="todoCheck3">
+														<label for="todoCheck3"></label>
+													</div>
+													<span class="text">Let theme shine like a star</span>
+													<small class="badge badge-warning">
+														<i class="far fa-clock"></i>
+														1 day</small>
+													<div class="tools">
+														<i class="fas fa-edit"></i>
+														<i class="fas fa-trash-o"></i>
+													</div>
+												</li>
+												<li>
+													<span class="handle">
+														<i class="fas fa-ellipsis-v"></i>
+														<i class="fas fa-ellipsis-v"></i>
+													</span>
+													<div class="icheck-primary d-inline ml-2">
+														<input type="checkbox" value="" name="todo4" id="todoCheck4">
+														<label for="todoCheck4"></label>
+													</div>
+													<span class="text">Let theme shine like a star</span>
+													<small class="badge badge-success">
+														<i class="far fa-clock"></i>
+														3 days</small>
+													<div class="tools">
+														<i class="fas fa-edit"></i>
+														<i class="fas fa-trash-o"></i>
+													</div>
+												</li>
+												<li>
+													<span class="handle">
+														<i class="fas fa-ellipsis-v"></i>
+														<i class="fas fa-ellipsis-v"></i>
+													</span>
+													<div class="icheck-primary d-inline ml-2">
+														<input type="checkbox" value="" name="todo5" id="todoCheck5">
+														<label for="todoCheck5"></label>
+													</div>
+													<span class="text">Check your messages and notifications</span>
+													<small class="badge badge-primary">
+														<i class="far fa-clock"></i>
+														1 week</small>
+													<div class="tools">
+														<i class="fas fa-edit"></i>
+														<i class="fas fa-trash-o"></i>
+													</div>
+												</li>
+												<li>
+													<span class="handle">
+														<i class="fas fa-ellipsis-v"></i>
+														<i class="fas fa-ellipsis-v"></i>
+													</span>
+													<div class="icheck-primary d-inline ml-2">
+														<input type="checkbox" value="" name="todo6" id="todoCheck6">
+														<label for="todoCheck6"></label>
+													</div>
+													<span class="text">Let theme shine like a star</span>
+													<small class="badge badge-secondary">
+														<i class="far fa-clock"></i>
+														1 month</small>
+													<div class="tools">
+														<i class="fas fa-edit"></i>
+														<i class="fas fa-trash-o"></i>
+													</div>
+												</li>
+											</ul>
+										{% endblock %}
+									</div>
+									<!-- /.card-body -->
+									<div class="card-footer clearfix">
+										<div class='btn-group'>
+											{% block cardfooter %}
+												{# <a href="{{url('planification_index')}}" class="btn btn-primary float-right">
+																																																																																																																																																																																																																																																																																																																										<i class="fas fa-search-plus"></i>
+																																																																																																																																																																																																																																																																																																																										Voir programme des défenses</a> #}
+											{% endblock %}
+										</div>
+									</div>
+								</div>
+								<!-- /.card -->
+							</section>
+							<!-- /.Left col -->
+						</div>
+						<!-- /.row (main row) -->
+					</div>
+					<!-- /.container-fluid -->
+				</section>
+				<!-- /.content -->
+			</div>
+			<!-- /.content-wrapper -->
+			<footer class="main-footer no-print ">
+				<strong>Copyright &copy; 2022
+					<a href="#">La Générale d'Ingéniérie Système WebTronBlue Inc</a>.</strong>
+				All rights reserved.
+				<div class="float-right d-none d-sm-inline-block">
+					<b>Version</b>
+					stable
+				</div>
+			</footer>
+
+			<!-- Control Sidebar -->
+			<aside
+				class="control-sidebar control-sidebar-dark"><!-- Control sidebar content goes here -->
+			</aside>
+			<!-- /.control-sidebar -->
+		</div>
+		<!-- ./wrapper -->
+
+		<!-- jQuery -->
+		<script src="{{asset('plugins/jquery/jquery.min.js')}}"></script>
+		<!-- jQuery UI 1.11.4 -->
+		<script src="{{asset('plugins/jquery-ui/jquery-ui.min.js')}}"></script>
+		<!-- Affichage des noms de fichiers  -->
+		<script src="{{asset('dist/js/bs-custom-file-input.min.js')}}"></script>
+
+		<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+		<script>
+			$.widget.bridge('uibutton', $.ui.button)
+		</script>
+		<!-- Bootstrap 4 -->
+		<script src="{{asset('plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+		<!-- select 2 -->
+
+		<script src="{{asset('plugins/select2/js/select2.full.min.js')}}"></script>
+
+
+		<!-- DataTables  & Plugins -->
+		<script src="{{asset('plugins/datatables/jquery.dataTables.min.js')}}"></script>
+		<script src="{{asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js')}}"></script>
+		<script src="{{asset('plugins/datatables-responsive/js/dataTables.responsive.min.js')}}"></script>
+		<script src="{{asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js')}}"></script>
+		<script src="{{asset('plugins/datatables-buttons/js/dataTables.buttons.min.js')}}"></script>
+		<script src="{{asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js')}}"></script>
+		<script src="{{asset('plugins/jszip/jszip.min.js')}}"></script>
+		<script src="{{asset('plugins/pdfmake/pdfmake.min.js')}}"></script>
+		<script src="{{asset('plugins/pdfmake/vfs_fonts.js')}}"></script>
+		<script src="{{asset('plugins/datatables-buttons/js/buttons.html5.min.js')}}"></script>
+		<script src="{{asset('plugins/datatables-buttons/js/buttons.print.min.js')}}"></script>
+		<script src="{{asset('plugins/datatables-buttons/js/buttons.colVis.min.js')}}"></script>
+		<!-- ChartJS -->
+		<script src="{{asset('plugins/chart.js/Chart.min.js')}}"></script>
+		<!-- Sparkline -->
+		<script src="{{asset('plugins/sparklines/sparkline.js')}}"></script>
+		<!-- JQVMap -->
+		<script src="{{asset('plugins/jqvmap/jquery.vmap.min.js')}}"></script>
+		<script src="{{asset('plugins/jqvmap/maps/jquery.vmap.usa.js')}}"></script>
+		<!-- jQuery Knob Chart -->
+		<script src="{{asset('plugins/jquery-knob/jquery.knob.min.js')}}"></script>
+		<!-- daterangepicker -->
+		<script src="{{asset('plugins/moment/moment.min.js')}}"></script>
+		<script src="{{asset('plugins/daterangepicker/daterangepicker.js')}}"></script>
+		<!-- Tempusdominus Bootstrap 4 -->
+		<script src="{{asset('plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js')}}"></script>
+		<!-- Summernote -->
+		<script src="{{asset('plugins/summernote/summernote-bs4.min.js')}}"></script>
+		<!-- overlayScrollbars -->
+		<script src="{{asset('plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js')}}"></script>
+		<!-- AdminLTE App -->
+		<script src="{{asset('dist/js/adminlte.js')}}"></script>
+		<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+		<script src="{{asset('dist/js/pages/dashboard.js')}}"></script>
+		<script src="{{asset('dist/js/imbrication.js')}}"></script>
+		<script src="{{asset('dist/js/accordion.js')}}"></script>
+		<!-- FLOT CHARTS -->
+		<script src="{{asset('plugins/flot/jquery.flot.js')}}"></script>
+		<script src="{{asset('plugins/flot/plugins/jquery.flot.resize.js')}}"></script>
+		<!-- FLOT PIE PLUGIN - also used to draw donut charts -->
+		<script src="{{asset('plugins/flot/plugins/jquery.flot.pie.js')}}"></script>
+		<script>
+			$(function () {
+$("#example1").DataTable({
+"responsive": true,
+"lengthChange": false,
+"autoWidth": false,
+"buttons": [
+"copy",
+"csv",
+"excel",
+"pdf",
+"print",
+"colvis"
+]
+}).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+$('#example2').DataTable({
+"paging": true,
+"lengthChange": false,
+"searching": false,
+"ordering": true,
+"info": true,
+"autoWidth": false,
+"responsive": true
+});
+});
+		</script>
+		<script>
+			$(function () { // Initialize Select2 Elements
+$('.select2').select2()
+
+// Initialize Select2 Elements
+$('.select2bs4').select2({theme: 'bootstrap4'})
+});
+// affiche nom de custom file input
+
+document.querySelector('.custom-file-input').addEventListener('change', function (e) {
+var fileName = document.getElementById("myInput").files[0].name;
+var nextSibling = e.target.nextElementSibling
+nextSibling.innerText = fileName
+})
+		</script>
+
+		<script>
+			// Add the following code if you want the name of the file appear on select
+$("#user_pictureFile").on("change", function () {
+var fileName = $(this).val().split("\\").pop();
+$(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+});
+		</script>
+		<script>
+			$(document).ready(function () {
+$('#registration_sa_form_plainPassword, #registration_sa_form_email').on('keyup', function (e) {
+
+if ($('#registration_sa_form_plainPassword').val() != '' && $('#registration_sa_form_email').val() != '' && $('#registration_sa_form_plainPassword').val() == $('#registration_sa_form_email').val()) {
+$('#passwordStrength').removeClass().addClass('alert alert-error').html('Les mots de passe et email correspondent!');
+
+return false;
+}
+
+// Must have capital letter, numbers and lowercase letters
+var strongRegex = new RegExp("^(?=.{8,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*$", "g");
+
+// Must have either capitals and lowercase letters or lowercase and numbers
+var mediumRegex = new RegExp("^(?=.{7,})(((?=.*[A-Z])(?=.*[a-z]))|((?=.*[A-Z])(?=.*[0-9]))|((?=.*[a-z])(?=.*[0-9]))).*$", "g");
+
+// Must be at least 6 characters long
+var okRegex = new RegExp("(?=.{6,}).*", "g");
+
+if (okRegex.test($(this).val()) === false) { // If ok regex doesn't match the password
+$('#passwordStrength').removeClass().addClass('alert alert-error').html('Password must be 6 characters long.');
+
+} else if (strongRegex.test($(this).val())) { // If reg ex matches strong password
+$('#passwordStrength').removeClass().addClass('alert alert-success').html('Good Password!');
+} else if (mediumRegex.test($(this).val())) { // If medium password matches the reg ex
+$('#passwordStrength').removeClass().addClass('alert alert-info').html('Make your password stronger with more capital letters, more numbers and special characters!');
+} else { // If password is ok
+$('#passwordStrength').removeClass().addClass('alert alert-error').html('Weak Password, try using numbers and capital letters.');
+}
+
+return true;
+});
+</script>
+				<script>
+					$(document).ready(function () {
+bsCustomFileInput.init()
+})
+				</script>
+				{% block javascripts %}{% endblock %}
+			</body>
+		</html>
+		</html>
+		{# </body></html> #}
+	</body>
+</html>

@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}BroadcastMessage{% endblock %}
+
+{% block body %}
+    <h1>BroadcastMessage</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ broadcast_message.id }}</td>
+            </tr>
+            <tr>
+                <th>Titre</th>
+                <td>{{ broadcast_message.titre }}</td>
+            </tr>
+            <tr>
+                <th>CreatedAt</th>
+                <td>{{ broadcast_message.createdAt ? broadcast_message.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>GroupeDestinataire</th>
+                <td>{{ broadcast_message.groupeDestinataire }}</td>
+            </tr>
+            <tr>
+                <th>Contenu</th>
+                <td>{{ broadcast_message.contenu }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('broadcast_message_index') }}">back to list</a>
+
+    <a href="{{ path('broadcast_message_edit', {'id': broadcast_message.id}) }}">edit</a>
+
+    {{ include('broadcast_message/_delete_form.html.twig') }}
+{% endblock %}

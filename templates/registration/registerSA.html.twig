@@ -1,0 +1,86 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register
+{% endblock %}
+{% block lesboutons %}
+	<a href="{{url('user_index')}}" title="Retour à la liste " class="btn btn-info">
+		<i class="fa fa-reply-all"></i>
+	</a>
+{% endblock %}
+{% block titre %}
+	Création des super admin
+{% endblock %}
+{% block positionnement %}
+	<span class="fa fa-angle-double-right"></span>
+	Users
+	<span class="fa fa-angle-double-right"></span>
+	Création
+{% endblock %}
+{% block body %}
+	{% for flashError in app.flashes('verify_email_error') %}
+		<div class="alert alert-danger" role="alert">{{ flashError }}</div>
+	{% endfor %}
+
+	{{ form_start(registrationForm) }}
+
+	{{ form_errors(registrationForm) }}
+	<div class="row">
+		<div class="col-md-4">
+			<div class="form-group">
+				{{ form_label(registrationForm.username) }}
+				{{ form_widget(registrationForm.username) }}
+				{{ form_errors(registrationForm.username) }}
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group">
+				{{ form_row(registrationForm.plainPassword, {
+            label: 'Mot de passe',
+			attr:{'minlength':8}
+        }) }}
+			</div>
+
+		</div>
+		<div class="col-md-4">
+			<div class="form-group">
+				{{ form_label(registrationForm.email) }}
+				{{ form_widget(registrationForm.email) }}
+				{{ form_errors(registrationForm.email) }}
+			</div>
+		</div>
+
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+			<div class="form-group">
+				{{ form_label(registrationForm.roles) }}
+				{{ form_widget(registrationForm.roles) }}
+				{{ form_errors(registrationForm.roles) }}
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="form-group">
+				{{ form_row(registrationForm.agreeTerms, {label_attr:{class:'switch-custom'}}) }}
+			</div>
+		</div>
+	</div>
+
+	<button type="submit" class="btn btn-default">
+		<span class="fa fa-download"></span>
+		Enregistrer</button>
+	{{ form_rest(registrationForm) }}
+	{{ form_end(registrationForm) }}
+	{# <div class="social-auth-links text-center mt-2 mb-3">
+			<a href="#" class="btn btn-block btn-primary">
+				<i class="fab fa-facebook mr-2"></i>
+				Sign in using Facebook
+			</a>
+			<a href="#" class="btn btn-block btn-danger">
+				<i class="fab fa-google-plus mr-2"></i>
+				Sign in using Google+
+			</a>
+		</div> #}
+{% endblock %}

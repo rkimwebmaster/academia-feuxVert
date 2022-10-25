@@ -1,0 +1,31 @@
+{{ form_start(form) }}
+<div class="row">
+	<div class="col-md-6">
+		<div class="form-group">
+			{{ form_row(form.designation) }}
+		</div>
+	</div>
+	<div class="col-md-6">
+		<div class="form-group">
+
+			{{ form_row(form.description) }}
+		</div>
+	</div>
+	</div>
+
+{# 
+<h3>Départements</h3>
+<ul class="tags" data-index="{{ form.departements|length > 0 ? form.departements|last.vars.name + 1 : 0 }}" data-prototype="{{ form_widget(form.departements.vars.prototype)|e('html_attr') }}">
+	{% for departement in form.departements %}
+		<li>{{ form_widget(form.departements.vars.prototype.designation)|e }}</li>
+		<li>{{ form_widget(form.departements.vars.prototype.description)|e }}</li>
+	{% endfor %}
+</ul>
+	<button type="button" class="add_item_link" data-collection-holder-class="tags">Ajouter élément</button>
+
+    <br /><br /><br /> #}
+
+<button class="btn btn-default">
+<span class="fa fa-download"></span>
+{{ button_label|default('Enregistrer') }}</button>
+{{ form_end(form) }}

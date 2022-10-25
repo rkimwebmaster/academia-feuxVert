@@ -1,0 +1,98 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Depot
+{% endblock %}
+{% block lesboutons %}
+	<a href="{{ path('depot_index') }}" title="Retour à la liste " class="btn btn-info">
+		<i class="fa fa-reply-all"></i>
+	</a>
+	<a type="button" title="Ajouter nouveau " class="btn btn-info">
+		<i class="fas fa-plus-circle"></i>
+	</a>
+	<a type="button" title="Modifier élément  " class="btn btn-info">
+		<i class="fas fa-edit"></i>
+	</a>
+	<a type="button" title="Supprimer élément" class="btn btn-info">
+		<i class="fas fa-trash"></i>
+	</a>
+{% endblock %}
+{% block titre %}
+	Modifier dépot
+{% endblock %}
+{% block positionnement %}
+	<span class="fa fa-angle-double-right"></span>
+	Fiche
+	<span class="fa fa-angle-double-right"></span>
+	Dépot
+{% endblock %}
+{% block body %}
+	{% if is_granted('ROLE_ENSEIGNANT') %}
+		<h3 class="text-uppercase">Fiche &#x2116;
+			{{depot.fiche.id}}/{{depot.fiche.faculte|u.truncate(3)}}/{{depot.fiche.promotion.departement|u.truncate(3)}}/{{entreprise.anneeAcademiqueCourante}}</h3>
+		<div class="row">
+			<div class="col-sm-6 col-6">
+				Etudiant
+				<address>
+					<strong>{{depot.fiche.finaliste.civilite }}
+						{{depot.fiche.finaliste|upper }}</strong>
+					<br>
+					Promotion :
+					{{depot.fiche.finaliste.promotion|upper}}
+					<br>
+					<a href="tel:{{depot.fiche.finaliste.identite.telephone}}">
+						<span class="fa fa-phone"></span>
+					</a>
+					: (+243)
+					{{depot.fiche.finaliste.identite.telephone}}<br>
+					<a href="tel:{{depot.fiche.finaliste.user.email}}">
+						<span class="fa fa-envelope"></span>
+					</a>
+					:
+					{{depot.fiche.finaliste.user.email}}
+					<br>
+				</address>
+			</div>
+			<div class="col-sm-6 col-6 float-right ">
+				<div class="">
+					Fichier :
+					<a href="{{asset('uploads/brochures/'~depot.fichier)}}">{{depot.fichier}}</a>
+					<br/>
+					{% if depot.demandezRendezVous%}
+					<span class="bg-info text-danger">
+					{{ depot.fiche.finaliste|upper}}
+					demandé vous voir personnellement. Programmez un rendez-vous.
+					{% endif %}
+				</div>
+			</div>
+		</div>
+		<h6>
+			<i>
+				Date dépot :
+				{{depot.date|date('d/M/Y')}}
+			</i>
+		</h6>
+		<h6>
+			<i>
+				Sujet :
+				{{depot.fiche.sujetRetenu}}
+			</i>
+		</h6>
+		<div class="card card-primary">
+			<div class="card-header">
+				<h5 class="card-title m-0">{{depot.titre}}</h5>
+			</div>
+			<div class="card-body">
+				<h6 class="card-title"></h6>
+
+				<p class="card-text">
+				{{depot.noteEtudiant|raw}}
+				</p>
+			</div>
+		</div>
+
+
+	{% endif %}
+	{{ include('depot/_form.html.twig', {'button_label': 'Enregistrer'}) }}
+
+	{# {{ include('depot/_delete_form.html.twig') }} #}
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Finaliste index
+{% endblock %}
+{% block lesboutons %}
+	{% if is_granted('ROLE_ADMIN')%}
+		<a href="{{url('user_index')}}" title="Voir tous les utilisateurs du système " class="btn btn-info">
+			<i class="fa fa-reply-all"></i>
+		</a>
+	{% endif %}
+{% endblock %}
+{% block titre %}
+	Liste des finalistes
+{% endblock %}
+
+{% block positionnement %}
+	<span class="fa fa-angle-double-right"></span>
+	Finaliste
+	<span class="fa fa-angle-double-right"></span>
+	Liste
+{% endblock %}
+
+{% block body %}
+	<table id="example1" class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Noms
+				</th>
+				<th>Téléphone
+				</th>
+				<th>E-mail
+				</th>
+				<th>actions</th>
+			</tr>
+		</thead>
+		<tfoot>
+			<tr>
+				<th>#</th>
+				<th>Noms
+				</th>
+				<th>Téléphone
+				</th>
+				<th>E-mail
+				</th>
+				<th>actions</th>
+			</tr>
+		</tfoot>
+		<tbody>
+			{% for finaliste in finalistes %}
+				<tr>
+					<td>{{ loop.index }}</td>
+					<td>{{ finaliste }}</td>
+					<td>
+						<a title="envoyer un mail" href="mailto:{{finaliste.user.email}}">
+							<span class="fa fa-envelope"></span>
+						</a>
+						{{ finaliste.user.email }}</td>
+					<td>
+					<a title="envoyer un mail" href="tel:{{finaliste.user.finaliste.identite.telephone}}">
+							<span class="fa fa-phone"></span>
+						</a>
+						{{ finaliste.user.finaliste.identite.telephone }}</td>
+					<td>
+						<div class="btn-group">
+							<a href="{{ path('finaliste_show', {'id': finaliste.id}) }}" class="btn btn-default btn-sm">
+								<span class="fa fa-search-plus"></span>
+							</a>
+							<a href="{{ path('finaliste_edit', {'id': finaliste.id}) }}" class="btn btn-default btn-sm">
+								<span class="fa fa-edit"></span>
+							</a>
+						</div>
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="5" class="text-warning">aucun élément trouvé</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}

@@ -1,0 +1,154 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Fiche index
+{% endblock %}
+{% block titre %}
+	Toutes les fiches
+	{% if promotion is defined  %}
+		de
+		{{promotion}}
+	{% endif %}
+{% endblock %}
+{% block lesboutons %}{% endblock %}
+{% block positionnement %}
+	<span class="fa fa-angle-double-right"></span>
+	Fiche
+	<span class="fa fa-angle-double-right"></span>
+	Liste
+{% endblock %}
+
+{% block body %}
+	<table id="example1" class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Etudiant</th>
+				<th>Promotion</th>
+				<th>Statut Fiche</th>
+				<th>actions</th>
+			</tr>
+		</thead>
+		<tfoot>
+			<tr>
+				<th>#</th>
+				<th>Etudiant</th>
+				<th>Promotion</th>
+				<th>Statut Fiche</th>
+				<th>actions</th>
+			</tr>
+		</tfoot>
+		<tbody>
+			{% for fiche in fiches %}
+				<tr>
+					<td>{{ loop.index }}</td>
+					<td>{{ fiche.finaliste|capitalize }}
+						{% if fiche.isPaiementDepot %}
+							<span title="En ordre de paiement " class="fa fa-calculator text-success"></span>
+						{% endif %}
+					</td>
+					<td>{{ fiche.promotion }}</td>
+					<td>
+						{% if fiche.etatFiche==1 %}
+							<span class="badge badge-danger">
+								En attente de soumission
+							</span>
+						{% elseif fiche.isRejete %}
+							<span class="badge badge-danger">
+								<span class="fa fa-trash"></span>
+								Cette fiche a été rejété, modifiez le sujet
+
+							{% elseif fiche.etatFiche==2 %}
+								{% if fiche.isRejete %}
+									<span class="badge badge-danger">
+										<span class="fa fa-trash">Cette fiche a été rejété, veuillez en modifier le sujet
+										</span>
+									{% endif %}
+									<span class="badge badge-danger">
+										En attente de traitement/validation
+									</span>
+								{% elseif fiche.etatFiche==3 %}
+									<span class="badge badge-warning">
+										En cours de redaction
+									</span>
+								{% elseif fiche.etatFiche==4 %}
+									<span class="badge badge-success">
+										En mode feux vert, atttente alignement
+									</span>
+								{% elseif fiche.etatFiche==5 %}
+									<span class="badge badge-info">
+										Aligné, En attente de défense
+									</span>
+								{% elseif fiche.etatFiche==6 %}
+									<span class="badge badge-primary">
+										Défendu, en attente classement
+									</span>
+								{% elseif fiche.etatFiche==7 %}
+									<span class="badge badge-primary">
+										Classée et coté
+									</span>
+								{% elseif fiche.isPaiementDepot %}
+									<span class="badge badge-primary">
+										Fiche Payée pour dépot
+									</span>
+								{% endif %}
+							</td>
+						</td>
+					</td>
+					<td>
+						<div class="btn-group">
+							<a title="Voir la fiche" class="btn btn-default btn-sm" href="{{ path('fiche_show', {'id': fiche.id}) }}">
+								<span class="fas fa-search-plus"></span>
+							</a>
+							{% if is_granted('ROLE_ADMIN') %}
+								{% if not fiche.isValidee %}
+									<a title="traiter et valider" class="btn btn-default btn-sm" href="{{ path('fiche_traiter', {'id': fiche.id}) }}">
+										<span class="fas fa-toggle-off"></span>
+									</a>
+								{% endif %}
+							{% elseif is_granted('ROLE_FINALISTE') %}
+								{% if not fiche.isSoumis %}
+									<a title="Soumettre pour validation" class="btn btn-danger btn-sm" href="{{ path('fiche_soumettre', {'id': fiche.id}) }}">
+										<span class="fa fa-download"></span> soumettre</a>
+								{% endif %}
+								{% if fiche.etatFiche < 3 %}
+									<a title="Modifier " class="btn btn-default btn-sm" href="{{ path('fiche_edit', {'id': fiche.id}) }}">
+										<span class="fa fa-edit"></span>
+									</a>
+								{% endif %}
+							{% elseif is_granted('ROLE_ENSEIGNANT') %}
+								{% if not fiche.isFeuxVert %}
+									<a title="Accorder feux vert" class="btn btn-default btn-sm" href="{{ path('fiche_feux_vert', {'id': fiche.id}) }}">
+										<span class="fa fa-fire"></span>
+									</a>
+								{% endif %}
+								{# <a href="{{ path('depot_index_etudiant', {'id': fiche.id}) }}">voir les dépot</a> #}
+
+							{% endif %}
+							{% if fiche.etatFiche==4 %}
+								{% if is_granted('ROLE_ADMIN') %}
+									{% if fiche.etatFiche==5 %}
+										<a class="btn btn-default" href="{{ path('fiche_set_defendu', {'id': fiche.id}) }}" title="Notifier que le travail de cette fiche est déja défendu">
+											<span class="fa fa-check-circle text-success"></span>
+											défendu</a>
+									{% endif %}
+
+								{% endif %}
+							{% endif %}
+							{% if fiche.isFeuxVert %}
+								<a title="Imprimer " class="btn btn-default btn-sm" href="{{ path('fiche_print', {'id': fiche.id}) }}" target="_blank">
+									<span class="fa fa-print">
+										<span></a>
+									{% endif %}
+								</div>
+							</td>
+						</tr>
+					{% else %}
+						<tr>
+							<td colspan="7" class="text-warning">aucun élément trouvé</td>
+						</tr>
+					{% endfor %}
+				</tr>
+			</tbody>
+		</tbody>
+	</table>
+{% endblock %}

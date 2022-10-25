@@ -1,0 +1,157 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Depot index
+{% endblock %}
+{% block lesboutons %}
+	<a href="{{url('depot_new')}}" title="Nouveau dépot " class="btn btn-info">
+		<i class="fas fa-plus-circle"></i>
+	</a>
+{% endblock %}
+{% block titre %}
+	Liste des dépots successifs
+{% endblock %}
+{% block positionnement %}
+	<span class="fa fa-angle-double-right"></span>
+	Fiche
+	<span class="fa fa-angle-double-right"></span>
+	Dépots
+{% endblock %}
+{% block body %}
+	<h3 class="text-uppercase">Fiche &#x2116;
+		{{app.user.finaliste.fiche.id}}/{{app.user.finaliste.fiche.faculte|u.truncate(3)}}/{{app.user.finaliste.fiche.promotion.departement|u.truncate(3)}}/{{entreprise.anneeAcademiqueCourante}}</h3>
+	<div class="row">
+		<div class="col-sm-6 col-6">
+			Etudiant
+			<address>
+				<strong>{{app.user.finaliste.fiche.finaliste.civilite }}
+					{{app.user.finaliste.fiche.finaliste|upper }}</strong>
+				<br>
+				Promotion :
+				{{app.user.finaliste.fiche.finaliste.promotion|capitalize}}
+				<br>
+				<a href="tel:{{app.user.finaliste.fiche.finaliste.identite.telephone}}">
+					<span class="fa fa-phone"></span>
+				</a>
+				: (+243)
+				{{app.user.finaliste.fiche.finaliste.identite.telephone}}<br>
+				<a href="mailto:{{app.user.finaliste.fiche.finaliste.user.email}}">
+					<span class="fa fa-envelope"></span>
+				</a>
+				:
+				{{app.user.finaliste.fiche.finaliste.user.email}}
+				<br>
+			</address>
+		</div>
+		<div class="col-sm-6 col-6 float-right ">
+			{% if app.user.finaliste.fiche.isValidee %}
+				Directeur
+				<address>
+					<strong>{{app.user.finaliste.fiche.directeurRetenu.grade}}
+						{{app.user.finaliste.fiche.directeurRetenu|upper}}</strong><br>
+					<a href="tel:{{app.user.finaliste.fiche.directeurRetenu.identite.telephone}}">
+						<span class="fa fa-phone"></span>
+					</a>
+					: (+243)
+					{{app.user.finaliste.fiche.directeurRetenu.identite.telephone}}<br>
+					{% if app.user.finaliste.fiche.directeurRetenu.user %}
+						<a href="mailto:{{app.user.finaliste.fiche.directeurRetenu.user.email}}">
+							<span class="fa fa-envelope"></span>
+						</a>
+					{% endif %}
+					:
+					{% if app.user.finaliste.fiche.directeurRetenu.user %}
+						{{app.user.finaliste.fiche.directeurRetenu.user.email}}
+					{% endif %}
+				</address>
+			{% else %}
+				Directeur proposé
+				<address>
+					<strong>{{app.user.finaliste.fiche.directeurPropose.grade}}
+						{{app.user.finaliste.fiche.directeurPropose|upper}}</strong><br>
+					<a href="tel:{{app.user.finaliste.fiche.directeurPropose.identite.telephone}}">
+						<span class="fa fa-phone"></span>
+					</a>
+					: (+243)
+					{{app.user.finaliste.fiche.directeurPropose.identite.telephone}}<br>
+					{% if app.user.finaliste.fiche.directeurPropose.user %}
+						<a href="mailto:{{app.user.finaliste.fiche.directeurPropose.user.email}}">
+							<span class="fa fa-envelope"></span>
+						</a>
+					{% endif %}
+					:
+					{% if app.user.finaliste.fiche.directeurPropose.user %}
+						{{app.user.finaliste.fiche.directeurPropose.user.email}}
+					{% endif %}
+				</address>
+			{% endif %}
+		</div>
+	</div>
+	<h6>
+		<i>
+			Date proposition :
+			{{app.user.finaliste.fiche.date|date('d/M/Y')}}
+		</i>
+	</h6>
+
+	<table id="example1" class="table table-bordered table-striped">
+
+		<tbody>
+			{% for depot in depots %}
+				<tr>
+					<td>{{loop.index }}</td>
+					<td colspan="5" class="text-warning">
+						<div class="post">
+							<div class="user-block">
+								{% if depot.isCorrige %}
+									<img class="img-circle text-success img-bordered-sm" src="{{asset('images/svg/check-square.svg')}}" alt="user image">
+								{% else %}
+									<img class="img-circle text-success img-bordered-sm" src="{{asset('images/svg/times-circle.svg')}}" alt="user image">
+								{% endif %}
+								<span class="username">
+									<a href="{{url('depot_show',{'id':depot.id})}}">{{depot.titre}}</a>
+								</span>
+								<span class="description">
+									{% if depot.isCorrige %}
+										Corrigé le
+										{{depot.dateCorrection|date('d-M-Y')}}
+									{% else %}
+										Déposé le
+										{{depot.date|date('d-M-Y')}}
+									{% endif  %}
+								</span>
+							</div>
+							<!-- /.user-block -->
+							<p>
+								{% if depot.isCorrige %}
+									{{depot.noteDirecteur|u.truncate(350)|raw}}
+								{% else %}
+									{{depot.noteEtudiant|u.truncate(350)|raw}}
+								{% endif %}
+							</p>
+
+							<p>
+								{% if depot.isCorrige %}
+									{% if depot.fichierCorrigeDirecteur %}
+										<a href="{{asset('uploads/brochures/'~depot.fichierCorrigeDirecteur)}}" class="link-black text-sm">
+											<i class="fas fa-link mr-1"></i>
+											{{depot.fichierCorrigeDirecteur}}
+										</a>
+									{% endif %}
+								{% else %}
+									<a href="{{asset('uploads/brochures/'~depot.fichier)}}" class="link-black text-sm">
+										<i class="fas fa-link mr-1"></i>
+										{{depot.fichier }}
+									</a>
+								{% endif %}
+							</p>
+						</div>
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="2" class="text-warning">aucun élément trouvé</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}

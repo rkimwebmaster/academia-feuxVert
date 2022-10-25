@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Cloture{% endblock %}
+{% block lesboutons %}
+	<a  href="{{ path('cloture_index') }}" title="Retour à la liste " class="btn btn-info">
+		<i class="fa fa-reply-all"></i>
+	</a>
+	<a href="{{ path('cloture_new') }}" title="Ajouter nouveau " href="{{ path('departement_new') }}" class="btn btn-info">
+		<i class="fas fa-plus-circle"></i>
+	</a>
+{% endblock %}
+{% block titre %}
+	Liste des défenses clôturés  
+{% endblock %}
+{% block positionnement %}
+	<span class="fa fa-angle-double-right"></span>
+	Défenses 
+	<span class="fa fa-angle-double-right"></span>
+	Clotures 
+{% endblock %}
+{% block body %}
+    <h1>Create new Cloture</h1>
+
+    {{ include('cloture/_form.html.twig') }}
+
+    <a href="{{ path('cloture_index') }}">back to list</a>
+{% endblock %}

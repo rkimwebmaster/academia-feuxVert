@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New PaiementDepot{% endblock %}
+{% block titre %}
+	Nouveau paiement pour dépot 
+{% endblock %}
+{% block lesboutons %}
+	<a href="{{ path('paiement_depot_index') }}" title="Retour à la liste " class="btn btn-info">
+		<i class="fa fa-reply-all"></i>
+	</a>
+	<a type="button" href="{{url('fiche_new')}}" title="Ajouter nouveau " class="btn btn-info">
+		<i class="fas fa-plus-circle"></i>
+	</a>
+	<a type="button" title="Modifier élément  " class="btn btn-info">
+		<i class="fas fa-edit"></i>
+	</a>
+	<a type="button" title="Supprimer élément" class="btn btn-info">
+		<i class="fas fa-trash"></i>
+	</a>
+{% endblock %}
+{% block positionnement %}
+	<span class="fa fa-angle-double-right"></span>
+	Finances 
+	<span class="fa fa-angle-double-right"></span>
+	nouveaux Paiement 
+{% endblock %}
+{% block body %}
+    {{ include('paiement_depot/_form.html.twig') }}
+{% endblock %}

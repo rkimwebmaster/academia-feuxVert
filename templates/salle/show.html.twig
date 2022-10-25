@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Salle{% endblock %}
+
+{% block titre %}
+	Détail salle 
+{% endblock %}
+{% block lesboutons %}
+	<a title="Retour à la liste " class="btn btn-info">
+		<i class="fa fa-reply-all"></i>
+	</a>
+	<a type="button" href="{{url('fiche_new')}}" title="Ajouter nouveau " class="btn btn-info">
+		<i class="fas fa-plus-circle"></i>
+	</a>
+	<a type="button" title="Modifier élément  " class="btn btn-info">
+		<i class="fas fa-edit"></i>
+	</a>
+	<a type="button" title="Supprimer élément" class="btn btn-info">
+		<i class="fas fa-trash"></i>
+	</a>
+{% endblock %}
+{% block positionnement %}
+	<span class="fa fa-angle-double-right"></span>
+	Salle
+	<span class="fa fa-angle-double-right"></span>
+	Détail
+{% endblock %}
+
+{% block body %}
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ salle.id }}</td>
+            </tr>
+            <tr>
+                <th>Designation</th>
+                <td>{{ salle.designation }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ salle.description }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('salle_index') }}">back to list</a>
+
+    <a href="{{ path('salle_edit', {'id': salle.id}) }}"class="btn btn-default btn-sm"><span class="fa fa-edit"></span></a>
+
+    {{ include('salle/_delete_form.html.twig') }}
+{% endblock %}

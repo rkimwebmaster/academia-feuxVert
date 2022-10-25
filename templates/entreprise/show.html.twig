@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Entreprise{% endblock %}
+{% block lesboutons %}
+{% if is_granted('ROLE_IT') %}
+	<a href="{{ path('entreprise_edit', {'id': entreprise.id}) }}" title="Modifier élément  " class="btn btn-info">
+		<i class="fas fa-edit"></i>
+	</a>
+    {% endif %}
+{% endblock %}
+{% block titre %}
+	Détail de l'institution
+{% endblock %}
+{% block positionnement %}
+	<span class="fa fa-angle-double-right"></span>
+	Config.
+	<span class="fa fa-angle-double-right"></span>
+	Université
+{% endblock %}
+{% block body %}
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Nom</th>
+                <td>{{ entreprise.nom }}</td>
+            </tr>
+            <tr>
+                <th>Adresse</th>
+                <td>{{ entreprise.adresse }}</td>
+            </tr>
+            <tr>
+                <th>Ville</th>
+                <td>{{ entreprise.ville }}</td>
+            </tr>
+            <tr>
+                <th>Pays</th>
+                <td>{{ entreprise.pays }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ entreprise.email }}</td>
+            </tr>
+            <tr>
+                <th>Telephone1</th>
+                <td> <a href="tel:{{ entreprise.telephone1 }}"> <span class="fa fa-phone "> </span></a>{{ entreprise.telephone1 }}</td>
+            </tr>
+            <tr>
+                <th>Telephone2</th>
+                <td> <a href="tel:{{ entreprise.telephone2 }}"><span class="fa fa-phone "></span></a> {{ entreprise.telephone2 }}</td>
+            </tr>
+            <tr>
+                <th>Website</th>
+                <td><span class="fab fa-internet-explorer "> </span> <a href="{{ entreprise.website }}">{{ entreprise.website }}</a></td>
+            </tr>
+            <tr>
+                <th>IsPublique</th>
+                <td>{{ entreprise.isPublique ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Sigle</th>
+                <td>{{ entreprise.sigle }}</td>
+            </tr>
+            <tr>
+                <th>Logo</th>
+                <td>{{ entreprise.logo }}</td>
+            </tr>
+            <tr>
+                <th>Devise</th>
+                <td>{{ entreprise.devise }}</td>
+            </tr>
+            <tr>
+                <th>Monaie</th>
+                <td>{{ entreprise.monaie }}</td>
+            </tr>
+            <tr>
+                <th>BoitePostale</th>
+                <td>{{ entreprise.boitePostale }}</td>
+            </tr>
+            <tr>
+                <th>AnneeAcademiqueCourante</th>
+                <td>{{ entreprise.anneeAcademiqueCourante }}</td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}

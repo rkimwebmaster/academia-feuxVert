@@ -1,0 +1,117 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Depot index
+{% endblock %}
+{% block lesboutons %}
+	<a href="{{ path('depot_index') }}" title="Retour à la liste " class="btn btn-info">
+		<i class="fa fa-reply-all"></i>
+	</a>
+	<a href="{{ path('depot_new') }}" title="Ajouter nouveau " class="btn btn-info">
+		<i class="fas fa-plus-circle"></i>
+	</a>
+	<a type="button" title="Modifier élément  " class="btn btn-info">
+		<i class="fas fa-edit"></i>
+	</a>
+	<a type="button" title="Supprimer élément" class="btn btn-info">
+		<i class="fas fa-trash"></i>
+	</a>
+{% endblock %}
+{% block titre %}
+	{% if is_granted('ROLE_ADMIN') %}
+		Liste des dépots étudiants
+	{% elseif is_granted('ROLE_ENSEIGNANT') %}
+		Liste des dépots de mes directions
+	{% elseif is_granted('ROLE_FINALISTE') %}
+		Tous de mes  dépots
+	{% endif %}
+
+{% endblock %}
+
+{% block positionnement %}
+	<span class="fa fa-angle-double-right"></span>
+	Fiche
+	<span class="fa fa-angle-double-right"></span>
+	Dépots
+{% endblock %}
+{% block body %}
+
+	<table id="example1" class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th nowrap>Date
+				</th>
+				<th>Note Etudiant</th>
+				<th>Oservation de l'encadreur
+				</th>
+				<th>actions</th>
+			</tr>
+		</thead>
+		<tfoot>
+			<tr>
+				<th>#</th>
+				<th nowrap>Date
+				</th>
+				<th>Note Etudiant</th>
+				<th>Oservation de l'encadreur
+				</th>
+				<th>actions</th>
+			</tr>
+		</tfoot>
+		<tbody>
+			{% for depot in depots %}
+
+				<tr>
+					<td>{{ loop.index }}</td>
+					<td>
+						Dépot:
+						{{ depot.dateDepot ? depot.dateDepot|date('d-M-Y') : '' }}
+						<br>
+						{% if depot.dateCorrection %}
+							Correction:
+							{{ depot.dateCorrection ? depot.dateDepot|date('d-M-Y') : '' }}
+						{% endif %}
+
+					</td>
+					<td>{{ depot.noteEtudiant }}</td>
+					<td>{{ depot.noteDirecteur }}</td>
+					<td>
+						<div class=" btn-group">
+							<a class="btn btn-default btn-sm" href="{{ path('depot_show', {'id': depot.id}) }}">
+								<span class="fa fa-search-plus"></span>
+							</a>
+							{% if is_granted('ROLE_FINALISTE') %}
+								{% if not depot.isCorrige %}
+									<a class="btn btn-default btn-sm" href="{{ path('depot_edit', {'id': depot.id}) }}">
+										<span class="fa fa-edit"></span>
+									</a>
+								{% endif %}
+							{% endif %}
+							{% if depot.fichier %}
+								<a class="btn btn-default btn-sm" href="{{asset('uploads/brochures/')~depot.fichier}}" title="Téléchargez le fichier étudiant ">
+									<span class=" fa fa-book"></span>
+								</a>
+							{% endif %}
+							{% if depot.fichierCorrigeDirecteur %}
+								<a class="btn btn-default btn-sm" href="{{asset('uploads/brochures/')~depot.fichierCorrigeDirecteur}}" title="Téléchargez le fichier enseignant ">
+									<span class=" fa fa-book"></span>
+								</a>
+							{% endif %}
+							{% if is_granted('ROLE_ENSEIGNANT')%}
+								{% if not depot.isCorrige %}
+									<a class="btn btn-default btn-sm" href="{{ path('depot_edit_enseignant', {'id': depot.id}) }}" title="Répondre à ce dépot ">
+										<span class=" fa fa-reply-all"></span>
+									</a>
+								{% endif %}
+							{% endif %}
+						</div>
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="5" class="text-warning">aucun élément trouvé</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}

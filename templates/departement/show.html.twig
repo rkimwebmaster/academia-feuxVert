@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Departement
+{% endblock %}
+{% block lesboutons %}
+	<a href="{{url('departement_index')}}" title="Retour à la liste " class="btn btn-info">
+		<i class="fa fa-reply-all"></i>
+	</a>
+	<a href="{{url('departement_new')}}" title="Ajouter nouveau " class="btn btn-info">
+		<i class="fas fa-plus-circle"></i>
+	</a>
+	<a href="{{url('departement_edit', {'id':departement.id })}}" title="Ajouter nouveau " class="btn btn-info">
+		<i class="fa fa-edit"></i>
+	</a>
+{% endblock %}
+{% block titre %}
+	Détail département
+{% endblock %}
+{% block positionnement %}
+	<span class="fa fa-angle-double-right"></span>
+	Config.
+	<span class="fa fa-angle-double-right"></span>
+	Département
+{% endblock %}
+{% block body %}
+
+	<table class="table">
+		<tbody>
+			<tr>
+				<th>Designation</th>
+				<td>{{ departement.designation }}</td>
+			</tr>
+			<tr>
+				<th>Description</th>
+				<td>{{ departement.description }}</td>
+			</tr>
+		</tbody>
+	</table>
+	{# {{ include('departement/_delete_form.html.twig') }} #}
+{% endblock %}

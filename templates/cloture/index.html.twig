@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cloture index{% endblock %}
+{% block lesboutons %}
+	<a  href="{{ path('cloture_index') }}" title="Retour à la liste " class="btn btn-info">
+		<i class="fa fa-reply-all"></i>
+	</a>
+	<a href="{{ path('cloture_new') }}" title="Ajouter nouveau " href="{{ path('departement_new') }}" class="btn btn-info">
+		<i class="fas fa-plus-circle"></i>
+	</a>
+{% endblock %}
+{% block titre %}
+	Liste des défenses clôturés  
+{% endblock %}
+{% block positionnement %}
+	<span class="fa fa-angle-double-right"></span>
+	Défenses 
+	<span class="fa fa-angle-double-right"></span>
+	Clotures 
+{% endblock %}
+{% block body %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Etudiant</th>
+                <th>Date</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for cloture in clotures %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ cloture.fiche.etudiant }}</td>
+                <td>{{ cloture.date ? cloture.date|date('Y-m-d') : '' }}</td>
+                <td>
+                    <a href="{{ path('cloture_show', {'id': cloture.id}) }}"class="btn btn-default btn-sm"><span class="fa fa-search-plus"></span></a>
+                    <a href="{{ path('cloture_edit', {'id': cloture.id}) }}"class="btn btn-default btn-sm"><span class="fa fa-edit"></span></a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4"class="text-warning">aucun élément trouvé</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('cloture_new') }}">Create new</a>
+{% endblock %}

@@ -1,0 +1,13 @@
+{{ form_start(form) }}
+    {{ form_row(form.date) }}
+    {{ form_row(form.salle) }}
+    {{ form_row(form.minutesDefense) }}
+    {{ form_row(form.minutesPause) }}
+    {{ form_row(form.isValidee) }}
+    	<h3 title="Etudiant en droit defendre" >Les étudiant qui devront déféndre </h3>
+    {{ form_row(form.fiches)}}
+    {{ form_row(form.observation) }}    
+    <button class="btn btn-default">
+    <span class="fa fa-download"> <span>
+    {{ button_label|default('Enregistrer') }}</button>
+{{ form_end(form) }}

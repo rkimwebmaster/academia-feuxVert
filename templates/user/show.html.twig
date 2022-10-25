@@ -1,0 +1,222 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User
+{% endblock %}
+{% block positionnement %}
+	<span class="fa fa-angle-double-right"></span>
+	Config.
+	<span class="fa fa-angle-double-right"></span>
+	Profile
+{% endblock %}
+{% block lesboutons %}
+	{% if is_granted('ROLE_ADMIN')%}
+		<a href="{{ path('user_index') }}" title="Retour à la liste " class="btn btn-info">
+			<i class="fa fa-reply-all"></i>
+		</a>
+		<a type="button" title="Ajouter un nouvel utilisateur " href="{{ path('app_register') }}" class="btn btn-info">
+			<i class="fas fa-plus-circle"></i>
+		</a>
+	{% endif %}
+{% endblock %}
+{% block titre %}
+	Apercu profile
+{% endblock %}
+{% block body %}
+	<div class="row">
+		<div
+			class="col-md-3 col">
+
+			<!-- Profile Image -->
+			<div class="card card-primary card-outline">
+				<div class="card-body box-profile">
+					<div class="text-center">
+						<img class="profile-user-img img-fluid img-circle" src="{{asset('dist/img/avatar3.png')}}" alt="User profile picture">
+					</div>
+
+					<h3 class="profile-username text-center">@{{ user.username }}
+						{% if user.finaliste %}
+							{{ user.finaliste|title }}
+						{% elseif user.enseignant %}
+							{{ user.enseignant|title }}
+						{% endif %}
+					</h3>
+
+					<p class="text-muted text-center">
+						{% if is_granted('ROLE_ADMIN') %}
+							<span class="badge badge-info" title="Veuillez à gerer le système en temps réel ">
+								vous êtes admin de faculté
+							</span>
+						{% elseif is_granted('ROLE_ENSEIGNANT') %}
+							<span class="badge badge-info" title="Merci cher enseignant pour la bonne formation ">
+								vous êtes enseignant
+							</span>
+						{% elseif is_granted('ROLE_IT') %}
+							<span class="badge badge-info" title="Merci ">
+								vous êtes admin WTB
+							</span>
+						{% elseif is_granted('ROLE_FINALISTE') %}
+							<span class="badge badge-info" title="Courage vers le feux vert et la défense ">
+								vous êtes étudiant
+							</span>
+						{% endif %}
+					</p>
+
+					<ul class="list-group list-group-unbordered mb-3">
+						<li class="list-group-item">
+							<a href="mailto:{{user.email}}">
+								<span class="fa fa-envelope"></span>
+							</a>
+							{{user.email}}
+
+						</li>
+						{% if app.user== user %}
+							{% if user.finaliste  %}
+								<li class="list-group-item">
+									<a href="tel:{{user.finaliste.identite.telephone}}">
+										<span class="fa fa-phone"></span>
+									</a>
+									{{user.finaliste.identite.telephone}}
+								</li>
+							{% elseif user.enseignant %}
+								<li class="list-group-item">
+									<a href="tel:{{user.enseignant.identite.telephone}}">
+										<span class="fa fa-phone"></span>
+									</a>
+									{{user.enseignant.identite.telephone}}
+								</li>
+							{% endif %}
+						{% elseif not app.user== user %}
+							<li class="list-group-item">
+								<a href="mailto:{{user.email}}">
+									<span class="fa fa-envelope"></span>
+								</a>
+								{{user.email}}
+							</li>
+							{% if user.finaliste %}
+								<li class="list-group-item">
+									{{user.finaliste.identite.telephone}}
+									<span class="fa fa-phone"></span>
+								</li>
+							{% endif %}
+							{% if user.enseignant %}
+								<li class="list-group-item">
+									<a href="tel:{{user.enseignant.identite.telephone}}">
+									<span class="fa fa-phone"></span>
+									</a>
+									{{user.enseignant.identite.telephone}}
+								</li>
+							{% endif %}
+						{% endif %}
+					</ul>
+					<a class="btn btn-default btn-block" href="{{ path('user_change_pass', {'id': app.user.id}) }}">
+						<span class="fa fa-edit"></span>
+						Changer mot de passe
+					</a>
+
+					<a class="btn btn-default btn-block" href="{{ path('app_forgot_password_request') }}">
+						<span class="fa fa-edit"></span>
+						Réinitialiser mot de passe
+					</a>
+				</div>
+				<!-- /.card-body -->
+			</div>
+			<!-- /.card -->
+		</div>
+		<!-- /.col -->
+
+		<div
+			class="col-md-9 col ">
+			<!-- About Me Box -->
+			<div class="card card-primary">
+				<div class="card-header">
+					<h3 class="card-title">Informations personnelles
+					</h3>
+				</div>
+				<!-- /.card-header -->
+				<div class="card-body">
+					{% if is_granted('ROLE_ENSEIGNANT') or is_granted('ROLE_FINALISTE') %}
+						<hr>
+						<strong>
+							<i class="fas fa-map-marker-alt mr-1"></i>
+							Adresse domicile
+						</strong>
+						{% if is_granted('ROLE_FINALISTE') %}
+							<p class="text-muted">{{user.finaliste.identite.adresse}}</p>
+						{% elseif is_granted('ROLE_ENSEIGNANT') %}
+							{% if app.user.enseignant %}
+								<p class="text-muted">{{user.enseignant.identite.adresse}}</p>
+							{% endif %}
+						{% endif %}
+					{% endif %}
+					{% if is_granted('ROLE_ENSEIGNANT') %}
+						<hr>
+						<strong>
+							<i class="fas fa-map-marker-alt mr-1"></i>
+							Adresse bureau
+						</strong>
+						{% if app.user.enseignant %}
+							<p class="text-muted">{{user.enseignant.adresseBureau}}</p>
+						{% endif %}
+					{% endif %}
+					{% if is_granted('ROLE_FINALISTE') %}
+						<hr>
+						<strong>
+							<i class="fas fa-map-marker-alt mr-1"></i>
+							Promotion et faculté
+						</strong>
+
+						<p class="text-muted">{{user.finaliste.promotion}}
+							Faculté :
+							{{user.finaliste.promotion.faculte}}</p>
+					{% endif %}
+
+					<hr>
+					<strong>
+						<i class="fas fa-user mr-1"></i>
+						Profile
+					</strong>
+
+					<p class="text-muted">
+						{% if is_granted('ROLE_ADMIN') %}
+							<span class="badge badge-info" title="Veuillez à gerer le système en temps réel ">
+								vous êtes admin de faculté
+							</span>
+						{% elseif is_granted('ROLE_ENSEIGNANT') %}
+							<span class="badge badge-info" title="Merci cher enseignant pour la bonne formation ">
+								vous êtes enseignant
+							</span>
+						{% elseif is_granted('ROLE_IT') %}
+							<span class="badge badge-info" title="Merci ">
+								vous êtes admin WTB
+							</span>
+						{% elseif is_granted('ROLE_FINALISTE') %}
+							<span class="badge badge-info" title="Courage vers le feux vert et la défense ">
+								vous êtes étudiant
+							</span>
+						{% endif %}
+					</p>
+				</div>
+				<!-- /.card-body -->
+				<div class="card-footer ">
+					{% if is_granted('ROLE_ADMIN') %}
+						{% if app.user.enseignant %}
+							<a class="btn btn-default btn-block" href="{{ path('enseignant_edit', {'id': app.user.enseignant.id}) }}">
+								<span class="fa fa-edit"></span>
+								Changer infos personnelles
+							</a>
+						{% endif %}
+						{% if app.user.finaliste %}
+							<a class="btn btn-default btn-block" href="{{ path('finaliste_edit', {'id': app.user.finaliste.id}) }}">
+								<span class="fa fa-edit"></span>
+								Changer infos personnelles
+							</a>
+						{% endif %}
+					{% endif %}
+				</div>
+			</div>
+			<!-- /.card -->
+		</div>
+	</div>
+
+	{# {{ include('user/_delete_form.html.twig') }} #}
+{% endblock %}

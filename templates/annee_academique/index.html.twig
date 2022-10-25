@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}AnneeAcademique index
+{% endblock %}
+{% block titre %}
+	Toutes les Années Académiques
+{% endblock %}
+
+{% block lesboutons %}
+	<a title="Retour à la liste " class="btn btn-info" href='{{ path('annee_academique_index') }}'>
+		<i class="fa fa-reply-all"></i>
+	</a>
+	<a title="Ajouter nouveau " class="btn btn-info" href="{{ path('annee_academique_new') }}">
+		<i class="fas fa-plus-circle"></i>
+	</a>
+{% endblock %}
+{% block body %}
+
+	<table id="example1" class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Début</th>
+				<th>Fin</th>
+				<th>est année courante
+				</th>
+				<th>actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for annee_academique in annee_academiques %}
+				<tr>
+					<td>{{ loop.index }}</td>
+					<td>{{ annee_academique.debut }}</td>
+					<td>{{ annee_academique.fin }}</td>
+					<td>{{ annee_academique.isCurrent }}</td>
+					<td>
+						<div class="btn-group float-sm-right">
+							<a href="{#{ path('annee_academique_show', {'id': annee_academique.id}) }#}" class="btn btn-info btn-sm">
+								<i class="fas fa-search-plus "></i>
+							</a>
+							<a href="{{ path('annee_academique_edit', {'id': annee_academique.id}) }}" class="btn btn-info btn-sm">
+								<i class="fas fa-edit"></i>
+							</a>
+						</div>
+
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="4">aucun enregistrement dans la base de données.</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+{% endblock %}

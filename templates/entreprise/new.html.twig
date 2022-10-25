@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Configurer l'université {% endblock %}
+{% block lesboutons %}
+{% if entreprise is defined %}
+{% if entreprise.id %}
+
+	<a href="{{ path('entreprise_edit', {'id': entreprise.id}) }}" title="Modifier élément  " class="btn btn-info">
+		<i class="fas fa-edit"></i>
+	</a>
+	{% endif %}
+	{% endif %}
+{% endblock %}
+{% block titre %}
+	Université
+{% endblock %}
+{% block positionnement %}
+	<span class="fa fa-angle-double-right"></span>
+	Config.
+	<span class="fa fa-angle-double-right"></span>
+	Université
+{% endblock %}
+
+{% block body %}
+    {{ include('entreprise/_form.html.twig') }}
+{% endblock %}

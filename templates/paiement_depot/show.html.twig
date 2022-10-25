@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}PaiementDepot
+{% endblock %}
+{% block titre %}
+	Réçu paiment dépot
+{% endblock %}
+{% block lesboutons %}
+	<a href="{{ path('paiement_depot_index') }}" title="Retour à la liste " class="btn btn-info">
+		<i class="fa fa-reply-all"></i>
+	</a>
+	{% if is_granted('ROLE_ADMIN') %}
+		{# <a href="{{ path('paiement_depot_edit', {'id': paiement_depot.id}) }}" title="Modifier élément  " class="btn btn-info">
+			<i class="fas fa-edit"></i>
+		</a> #}
+	{% endif %}
+{% endblock %}
+{% block positionnement %}
+	<span class="fa fa-angle-double-right"></span>
+	Finances
+	<span class="fa fa-angle-double-right"></span>
+	Réçu dépot
+{% endblock %}
+{% block body %}
+	<table class="table">
+		<tbody>
+			<tr>
+				<th>Numéro paiement </th>
+				<td>{{ paiement_depot.id }}</td>
+			</tr>
+			<tr>
+				<th>Date</th>
+				<td>{{ paiement_depot.date ? paiement_depot.date|date('d-M-Y') : '' }}</td>
+			</tr>
+			<tr>
+				<th>Etudiant </th>
+				<td>{{ paiement_depot.fiche.finaliste }}</td>
+			</tr>
+			<tr>
+				<th>Perecepteur</th>
+				<td>{{ paiement_depot.user }}</td>
+			</tr>
+		</tbody>
+	</table>
+
+	{# {% if isgranted('ROLE_ADMIN') %}
+		{{ include('paiement_depot/_delete_form.html.twig') }}
+	{% endif %} #}
+{% endblock %}

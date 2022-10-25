@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Fiche proposition | Academia::feux vert</title>
+
+		<!-- Google Font: Source Sans Pro -->
+		<link
+		rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+		<!-- Font Awesome -->
+		<link rel="stylesheet" href="{{asset('plugins/fontawesome-free/css/all.min.css')}}"><!-- Theme style -->
+		<!-- Theme style -->
+	<link rel="stylesheet" href="{{asset('dist/css/adminlte.min.css')}}"> 
+	</head>
+	<body>
+		<div
+			class="wrapper">
+			<!-- Main content -->
+			<section class="invoice">
+				<div class="row">
+					<div class="col-12">
+						<span class="text-center">
+							<h3>République Démocratique du Congo</h3>
+							<h2>Enseignement supérieur et universitaire
+							</h2>
+							<h1>Université Protestante de Lubumbashi
+							</h1>
+							<h2>Faculté des sciences informatiques
+							</h2>
+							<h2>BP: 56434
+							</h2>
+							<h2> <u>Lubumbashi </u>
+							</h2>
+							<hr>
+							<h1>Fiche de proposition de sujet No
+								{{fiche.id}}/ 2021-2022
+							</h1>
+							
+						</span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-6 col-6">
+						Etudiant
+						<address>
+							<strong>{{fiche.finaliste}}</strong><br>
+							Phone: (243){{fiche.finaliste.identite.telephone}}<br>
+							Email:{{fiche.finaliste.user.email}} <br>
+							Faculté :{{fiche.finaliste.user.email}} <br>
+							Département:{{fiche.finaliste.user.email}} <br>
+							Promotion:{{fiche.finaliste.user.email}} <br>
+						</address>
+					</div>
+					<div class="col-sm-6 col-6 float-right ">
+						Directeur
+						<address>
+							<strong>{{fiche.directeurRetenu}}</strong><br>
+							Phone: (243){{fiche.directeurRetenu.identite.telephone}}<br>
+							Email:{{fiche.directeurRetenu.user.email}}
+						</address>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-12">
+						Sujet :{{fiche.sujetRetenu}}
+						<div>
+							<div class="col-12">
+								<table class="table table-striped table-hover">
+									<thead>
+										<tr>
+											<th>
+												Jour dépot
+											</th>
+											<th>
+												Observation directeur
+											</th>
+										</tr>
+									</thead>
+									<tbody>
+										{% for depot in fiche.depots %}
+											<tr>
+												<td no-wrapped >
+													{{depot.date|date('d-M-Y')}}
+												</td>
+												<td>
+													{{depot.NoteDirecteur}}
+												</td>
+											</tr>
+										{% endfor  %}
+									</tbody>
+								</table>
+							</div>
+
+						</div>
+					</div>
+				</section>
+			</div>
+			<script>
+				window.addEventListener("load", window.print());
+			</script>
+		</body>
+	</body>
+</html>

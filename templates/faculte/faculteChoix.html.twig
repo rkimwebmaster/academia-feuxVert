@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Faculte index
+{% endblock %}
+
+{% block lesboutons %}
+	<a  href="{{ path('faculte_index') }}"  title="Retour à la liste " class="btn btn-info">
+		<i class="fa fa-reply-all"></i>
+	</a>
+	<a type="button" title="Ajouter nouveau " href="{{ path('faculte_new') }}" class="btn btn-info">
+		<i class="fas fa-plus-circle"></i>
+	</a>
+{% endblock %}
+{% block titre %}
+	Statistiques des facultés
+{% endblock %}
+{% block positionnement %}
+	<span class="fa fa-angle-double-right"></span>
+	Faculté 
+	<span class="fa fa-angle-double-right"></span>
+	Statistiques 
+{% endblock %}
+{% block body %}
+<div class="row">
+{% for faculte in facultes %}
+          <div class="col-md-3 col-sm-6 col-12">
+		  {# <a href="{{url('faculte_choix',{'id':faculte.id})}}"> #}
+            <div class="info-box">
+              <span class="info-box-icon bg-info"><i class="far fa-flag"></i></span>
+              <div class="info-box-content">
+                <span class="info-box-text">{{faculte|upper}}</span>
+                <span class="info-box-number">{{faculte.fiches|length}} étudiants</span>
+                {% for  finaliste in faculte.finalistes %}
+                FFF
+                {% endfor %}
+
+              </div>
+              <!-- /.info-box-content -->
+            </div>
+			{# </a> #}
+            <!-- /.info-box -->
+          </div>
+          <!-- /.col -->
+{% endfor %}
+          
+        </div>
+        <!-- /.row -->
+	
+{% endblock %}

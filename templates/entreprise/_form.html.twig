@@ -1,0 +1,127 @@
+{{ form_start(form) }}
+
+
+<div class="row">
+		<div class="col-md-5">
+			<div class="form-group">
+				{{ form_row(form.nom) }}
+			</div>
+		</div>
+		<div class="col-md-5">
+			<div class="form-group">
+				{{ form_row(form.sigle)}}
+			</div>
+		</div>
+        
+		<div class="col-md-2">
+			<div class="form-group">
+				{{ form_label(form.isPublique,'Cochez ')}}
+				{{ form_widget(form.isPublique)}}
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-4">
+			<div class="form-group">
+				{{ form_row(form.ville) }}
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group">
+				{{ form_row(form.pays ) }}
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group">
+				{{ form_row(form.brochure ) }}
+			</div>
+		</div>
+		
+	</div>
+
+	<div class="row">
+		<div class="col-md-4">
+			<div class="form-group">
+				{{ form_row(form.email) }}
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group">
+				{{ form_row(form.telephone1 ) }}
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group">
+				{{ form_row(form.telephone2) }}
+			</div>
+		</div>
+	</div>
+
+    <div class="row">
+		<div class="col-md-4">
+			<div class="form-group">
+				{{ form_row(form.monaie) }}
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group">
+				{{ form_row(form.prixDepot ) }}
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="form-group">
+				{{ form_row(form.boitePostale) }}
+			</div>
+		</div>
+	</div>
+    <div class="row">
+		<div class="col-md-3">
+			<div class="form-group">
+				{{ form_row(form.dateFinPropositionSujet) }}
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="form-group">
+				{{ form_row(form.dateDebutDefenseSession1 ) }}
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="form-group">
+				{{ form_row(form.dateDebutDefenseSession2) }}
+			</div>
+		</div>
+        <div class="col-md-3">
+			<div class="form-group">
+				{{ form_row(form.dateCollationGrade) }}
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-4">
+			<div class="form-group">
+				{{ form_row(form.website) }}
+			</div>
+		</div>
+        <div class="col-md-8">
+			<div class="form-group">
+				{{ form_row(form.devise) }}
+			</div>
+		</div>
+	</div>
+    <div class="row">
+        <div class="col-md-8">
+			<div class="form-group">
+				{{ form_row(form.adresse) }}
+			</div>
+		</div>
+        <div class="col-md-4">
+			<div class="form-group">
+				{{ form_row(form.anneeAcademiqueCourante) }}
+			</div>
+		</div>
+	</div>
+
+    <button class="btn btn-default ">
+    <span class="fa fa-download">
+    {{ button_label|default('Enregistrer') }}</button>
+{{ form_end(form) }}

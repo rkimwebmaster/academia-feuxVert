@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}LignePlanification index{% endblock %}
+
+
+{% block lesboutons %}
+	<a href="{{ path('planification_index') }}" title="Retour à la liste " class="btn btn-info">
+		<i class="fa fa-reply-all"></i>
+	</a>
+	<a href="{{ path('depot_new') }}" title="Ajouter nouveau " class="btn btn-info">
+		<i class="fas fa-plus-circle"></i>
+	</a>
+	<a type="button" title="Modifier élément  " class="btn btn-info">
+		<i class="fas fa-edit"></i>
+	</a>
+	<a type="button" title="Supprimer élément" class="btn btn-info">
+		<i class="fas fa-trash"></i>
+	</a>
+{% endblock %}
+{% block titre %}
+	Liste des planifications 
+
+{% endblock %}
+
+{% block positionnement %}
+	<span class="fa fa-angle-double-right"></span>
+	Défenses
+	<span class="fa fa-angle-double-right"></span>
+	Planifications
+{% endblock %}
+{% block body %}
+
+	<table id="example1" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Heure Debut</th>
+                <th>Heure Fin</th>
+                <th>Lecteurs </th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th>#</th>
+                <th>Heure Debut</th>
+                <th>Heure Fin</th>
+                <th>Lecteurs </th>
+                <th>actions</th>
+            </tr>
+        </tfoot>
+        <tbody>
+        {% for ligne_planification in ligne_planifications %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ ligne_planification.heureDebut ? ligne_planification.heureDebut|date('d-M-Y H:i:s') : '' }}</td>
+                <td>{{ ligne_planification.heureFin ? ligne_planification.heureFin|date('d-M-Y H:i:s') : '' }}</td>
+                <td>
+                {% for lecteur in ligne_planification.lecteurs %}
+                   {{loop.index}}) {{lecteur }} <br />
+                   {% else %}
+                   aucun lecteur pour cette défense
+                {% endfor %}
+                
+                </td>
+                <td>
+                    <a href="{{ path('ligne_planification_show', {'id': ligne_planification.id}) }}"class="btn btn-default btn-sm"><span class="fa fa-search-plus"></span></a>
+                    <a href="{{ path('ligne_planification_edit', {'id': ligne_planification.id}) }}"class="btn btn-default btn-sm"><span class="fa fa-edit"></span></a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5"class="text-warning">aucun élément trouvé</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('ligne_planification_new') }}">Create new</a>
+{% endblock %}

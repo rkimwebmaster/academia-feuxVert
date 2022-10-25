@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Finaliste
+{% endblock %}
+{% block lesboutons %}
+	{% if is_granted('ROLE_ADMIN') %}
+		<a href="{{ path('finaliste_index') }}" title="Retour à la liste " class="btn btn-info">
+			<i class="fa fa-reply-all"></i>
+		</a>
+	{% endif %}
+{% endblock %}
+{% block titre %}
+	Modifier finaliste
+{% endblock %}
+{% block body %}
+	{{ include('finaliste/_form.html.twig', {'button_label': 'Enregsitrer'}) }}
+
+	{# {{ include('finaliste/_delete_form.html.twig') }} #}
+{% endblock %}

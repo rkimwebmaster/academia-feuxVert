@@ -1,0 +1,252 @@
+{% extends 'base.html.twig' %}
+{% block titre %}
+	Academia Dashboard
+{% endblock %}
+{% block positionnement %}
+	<span class="fa fa-angle-double-right"></span>
+	DashBoard
+	<span class="fa fa-angle-double-right"></span>
+	Index
+{% endblock %}
+{% block body %}
+	<!-- Small boxes (Stat box) -->
+	<div class="row">
+		<div
+			class="col-lg-3 col-6">
+			<!-- small box -->
+			<div class="small-box bg-info">
+				<div class="inner">
+					<h3>
+						{% if app.user.finaliste.fiche %}
+							{{app.user.finaliste.fiche.date|date('d-M-Y')}}
+						{% endif %}
+					</h3>
+
+					<p>Date création
+					</p>
+				</div>
+				<div class="icon">
+					<i class="ion ion-bag"></i>
+				</div>
+				<a href="#" class="small-box-footer">Voir plus
+					<i class="fas fa-arrow-circle-right"></i>
+				</a>
+			</div>
+		</div>
+		<!-- ./col -->
+		<div
+			class="col-lg-3 col-6">
+			<!-- small box -->
+			<div class="small-box bg-success">
+				<div class="inner">
+					<h3>
+						{% if app.user.finaliste.fiche %}
+							{{app.user.finaliste.fiche.dateSoumission|date('d-M-Y')}}
+						{% endif %}
+					</h3>
+
+					<p>Fiche(s) soumise(s)</p>
+				</div>
+				<div class="icon">
+					<i class="ion ion-stats-bars"></i>
+				</div>
+				<a href="#" class="small-box-footer">Voir plus
+					<i class="fas fa-arrow-circle-right"></i>
+				</a>
+			</div>
+		</div>
+		<!-- ./col -->
+		<div
+			class="col-lg-3 col-6">
+			<!-- small box -->
+			<div class="small-box bg-warning">
+				<div class="inner">
+					<h3>
+						{% if app.user.finaliste.fiche %}
+							{{app.user.finaliste.fiche.dateValidation|date('d-M-Y')}}
+						{% endif %}
+					</h3>
+
+					<p>Validée</p>
+				</div>
+				<div class="icon">
+					<i class="ion ion-person-add"></i>
+				</div>
+				<a href="#" class="small-box-footer">Voir plus
+					<i class="fas fa-arrow-circle-right"></i>
+				</a>
+			</div>
+		</div>
+		<!-- ./col -->
+		<div
+			class="col-lg-3 col-6">
+			<!-- small box -->
+			<div class="small-box bg-danger">
+				<div class="inner">
+					<h3>
+						{% if app.user.finaliste.fiche %}
+							{{app.user.finaliste.fiche.dateFeuxVert|date('d-M-Y')}}
+						{% endif %}
+					</h3>
+
+					<p>fiches en mode feux vert</p>
+				</div>
+				<div class="icon">
+					<i class="ion ion-pie-graph"></i>
+				</div>
+				<a href="#" class="small-box-footer">Voir plus
+					<i class="fas fa-arrow-circle-right"></i>
+				</a>
+			</div>
+		</div>
+		<!-- ./col -->
+	</div>
+	<div class="row">
+		<div
+			class="col-lg-3 col-6">
+			<!-- small box -->
+			<div class="small-box bg-info">
+				<div class="inner">
+					<h3>
+						{% if app.user.finaliste.fiche %}
+							{{app.user.finaliste.fiche.date|date('d-M-Y')}}
+						{% endif %}
+					</h3>
+
+					<p>Alignée(s)</p>
+				</div>
+				<div class="icon">
+					<i class="ion ion-bag"></i>
+				</div>
+				<a href="#" class="small-box-footer">Voir plus
+					<i class="fas fa-arrow-circle-right"></i>
+				</a>
+			</div>
+		</div>
+		<!-- ./col -->
+		<div
+			class="col-lg-3 col-6">
+			<!-- small box -->
+			<div class="small-box bg-success">
+				<div class="inner">
+					<h3>
+						{% if app.user.finaliste.fiche %}
+							{{app.user.finaliste.fiche.dateDefense|date('d-M-Y')}}
+						{% endif %}
+					</h3>
+
+					<p>Fiches défendu</p>
+				</div>
+				<div class="icon">
+					<i class="ion ion-stats-bars"></i>
+				</div>
+				<a href="#" class="small-box-footer">Voir plus
+					<i class="fas fa-arrow-circle-right"></i>
+				</a>
+			</div>
+		</div>
+		<!-- ./col -->
+		<div
+			class="col-lg-3 col-6">
+			<!-- small box -->
+			<div class="small-box bg-warning">
+				<div class="inner">
+					<h3>
+						{% if not app.user.faculte.nombreFicheFeuxVert == 0 %}
+							{{app.user.faculte.nombreFicheValidee / app.user.faculte.nombreFicheFeuxVert * 100}}
+						{% else %}
+							0
+						{% endif %}
+						<sup style="font-size: 20px">%</sup>
+					</h3>
+
+					<p>
+						Taux validé/ feux vert
+					</p>
+				</div>
+				<div class="icon">
+					<i class="ion ion-person-add"></i>
+				</div>
+				<a href="#" class="small-box-footer">Voir plus
+					<i class="fas fa-arrow-circle-right"></i>
+				</a>
+			</div>
+		</div>
+		<!-- ./col -->
+		<div
+			class="col-lg-3 col-6">
+			<!-- small box -->
+			<div class="small-box bg-danger">
+				<div class="inner">
+					<h3>65</h3>
+
+					<p>Etudiant(s) enregistré(s)</p>
+				</div>
+				<div class="icon">
+					<i class="ion ion-pie-graph"></i>
+				</div>
+				<a href="#" class="small-box-footer">Voir plus
+					<i class="fas fa-arrow-circle-right"></i>
+				</a>
+			</div>
+		</div>
+		<!-- ./col -->
+	</div>
+
+
+	<div class="row">
+		<div class="col col-12">
+
+			<table id="example1" class="table table-bordered table-striped">
+				<legend>
+					Historique des dépots
+				</legend>
+				<thead>
+					<tr>
+						<th>#</th>
+						<th title="Date de dépot et correction">Date</th>
+						<th>Note Directeur</th>
+						<th>actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for depot in depots %}
+						<tr>
+							<td>{{ loop.index }}</td>
+							<td>Dépot:
+								{{ depot.date ? depot.date|date('d-M-Y') : '' }}
+								<br>
+								Correction:
+								{{ depot.dateCorrection ? depot.date|date('d-M-Y') : '' }}
+							</td>
+							<td>{{ depot.noteDirecteur|raw }}</td>
+							<td>
+								<div class=" btn-group">
+									<a class="btn btn-default btn-sm" href="{{ path('depot_show', {'id': depot.id}) }}">
+										<span class="fa fa-search-plus"></span>
+									</a>
+									<a class="btn btn-default btn-sm" href="{{asset('uploads/brochures/')~depot.fichier}}" title="Téléchargez le fichier étudiant ">
+										<span class=" fa fa-book"></span>
+									</a>
+									<a title="Corrigez le dépot étudiant" class="btn btn-default btn-sm" href="{{ path('depot_edit_enseignant', {'id': depot.id}) }}">
+										<span class="fa fa-edit"></span>
+									</a>
+									{% if depot.fichierCorrigeDirecteur %}
+										<a class="btn btn-default btn-sm" href="{{asset('uploads/brochures/')~depot.fichierCorrigeDirecteur}}" title="Téléchargez le fichier enseignant ">
+											<span class=" fa fa-book"></span>
+										</a>
+									{% endif %}
+								</div>
+							</td>
+						</tr>
+					{% else %}
+						<tr>
+							<td colspan="4" class="text-warning">aucun élément trouvé</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+
+		</div>
+	</div>
+{% endblock %}

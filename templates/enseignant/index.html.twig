@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Enseignant index
+{% endblock %}
+{% block lesboutons %}
+	{% if is_granted('ROLE_ADMIN')%}
+		<a href="{{url('user_index')}}" title="Voir tous les utilisateurs du système " class="btn btn-info">
+			<i class="fa fa-reply-all"></i>
+		</a>
+	{% endif %}
+{% endblock %}
+{% block titre %}
+	Liste des  Enseignant
+{% endblock %}
+
+{% block positionnement %}
+	<span class="fa fa-angle-double-right"></span>
+	Enseignant
+	<span class="fa fa-angle-double-right"></span>
+	Liste
+{% endblock %}
+
+{% block body %}
+	<table id="example1" class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Noms
+				</th>
+				<th>Téléphone</th>
+				<th>E-mail</th>
+				<th>actions</th>
+			</tr>
+		</thead>
+		<tfoot>
+			<tr>
+				<th>#</th>
+				<th>Noms
+				</th>
+				<th>Téléphone</th>
+				<th>E-mail</th>
+				<th>actions</th>
+			</tr>
+		</tfoot>
+		<tbody>
+			{% for enseignant in enseignants %}
+				<tr>
+					<td>{{ loop.index }}</td>
+					<td>{{ enseignant }}</td>
+					<td>
+						<a title="Appeller" href="tel:{{enseignant.identite.telephone}}">
+							<span class="fa fa-phone"></span>
+						</a>
+						{{ enseignant.identite.telephone }}</td>
+					<td>
+						<a title="Envoyer un mail" href="mailto:{{enseignant.user.email}}">
+							<span class="fa fa-envelope"></span>
+						</a>
+						{{ enseignant.user.email }}</td>
+					<td>
+						<div class="btn-group">
+							<a href="{{ path('enseignant_show', {'id': enseignant.id}) }}" class="btn btn-default btn-sm">
+								<span class="fa fa-search-plus"></span>
+							</a>
+							{% if is_granted('ROLE_ADMIN') %}
+							<a href="{{ path('enseignant_edit', {'id': enseignant.id}) }}" class="btn btn-default btn-sm">
+								<span class="fa fa-edit"></span>
+							</a>
+							{% endif %}
+						</div>
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="5" class="text-warning">aucun élément trouvé</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</tr>
+</tbody></tbody></table>{% endblock %}

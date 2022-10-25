@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier utilisateur
+{% endblock %}
+{% block titre %}
+	Modifier utilisateur
+{% endblock %}
+{% block lesboutons %}
+	<a href="{{url('user_index')}}" title="Retour à la liste " class="btn btn-info">
+		<i class="fa fa-reply-all"></i>
+	</a>
+	<a href="{{url('app_register')}}" title="Ajouter nouveau " class="btn btn-info">
+		<i class="fas fa-plus-circle"></i>
+	</a>
+{% endblock %}
+{% block positionnement %}
+	<span class="fa fa-angle-double-right"></span>
+	Profile
+	<span class="fa fa-angle-double-right"></span>
+	Modification
+{% endblock %}
+{% block body %}
+	{{ include('user/_form.html.twig', {'button_label': 'Enregistrer'}) }}
+	{{ include('user/_delete_form.html.twig') }}
+{% endblock %}

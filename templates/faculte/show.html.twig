@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Faculte
+{% endblock %}
+{% block lesboutons %}
+	<a href="{{ path('faculte_index') }}" title="Retour à la liste " class="btn btn-info">
+		<i class="fa fa-reply-all"></i>
+	</a>
+	<a href="{{ path('faculte_new') }}"  title="Ajouter nouveau " class="btn btn-info">
+		<i class="fas fa-plus-circle"></i>
+	</a>
+	<a href="{{ path('faculte_edit', {'id': faculte.id}) }}" title="Modifier élément  " class="btn btn-info">
+		<i class="fas fa-edit"></i>
+	</a>
+{% endblock %}
+{% block titre %}
+	Détail de la faculté
+{% endblock %}
+{% block body %}
+	<table class="table">
+		<tbody>
+			<tr>
+				<th>Id</th>
+				<td>{{ faculte.id }}</td>
+			</tr>
+			<tr>
+				<th>Designation</th>
+				<td>{{ faculte.designation }}</td>
+			</tr>
+			<tr>
+				<th>Description</th>
+				<td>{{ faculte.description }}</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<a href="{{ path('faculte_index') }}">back to list</a>
+
+	<a href="{{ path('faculte_edit', {'id': faculte.id}) }}" class="btn btn-default btn-sm">
+		<span class="fa fa-edit"></span>
+	</a>
+
+	{{ include('faculte/_delete_form.html.twig') }}
+{% endblock %}

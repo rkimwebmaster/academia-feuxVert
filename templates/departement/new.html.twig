@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Departement
+{% endblock %}
+{% block lesboutons %}
+	<a href="{{ path('departement_index') }}" title="Retour à la liste " class="btn btn-info">
+		<i class="fa fa-reply-all"></i>
+	</a>
+{% endblock %}
+{% block titre %}
+	Nouveau département de
+	{{app.user.faculte}}
+{% endblock %}
+{% block positionnement %}
+	<span class="fa fa-angle-double-right"></span>
+	Config.
+	<span class="fa fa-angle-double-right"></span>
+	Département
+{% endblock %}
+{% block body %}
+	{{ include('departement/_form.html.twig') }}
+
+	<br/>
+
+	<table id="example1" class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Designation
+				</th>
+				<th>Decsription
+				</th>
+				<th>actions</th>
+			</tr>
+		</thead>
+		<tfoot>
+			<tr>
+				<th>#</th>
+				<th>Designation
+				</th>
+				<th>Decsription
+				</th>
+				<th>actions</th>
+			</tr>
+		</tfoot>
+		<tbody>
+			{% for departement in departements %}
+				<tr>
+					<td>{{ loop.index }}</td>
+					<td>{{ departement.designation }}</td>
+					<td>{{ departement.description }}</td>
+					<td>
+						<div class="btn-group">
+							<a href="{{ path('departement_show', {'id': departement.id}) }}" class="btn btn-default btn-sm">
+								<span class="fa fa-search-plus"></span>
+							</a>
+							<a href="{{ path('departement_edit', {'id': departement.id}) }}" class="btn btn-default btn-sm">
+								<span class="fa fa-edit"></span>
+							</a>
+							{# <a href="{{ path('departement_creer_promotion', {'id': departement.id}) }}">créeer promotion</a> #}
+						</div>
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="4" class="text-warning">aucun élément trouvé</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}

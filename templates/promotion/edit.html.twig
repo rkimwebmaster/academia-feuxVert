@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Promotion
+{% endblock %}
+{% block lesboutons %}
+	<a title="Retour à la liste " class="btn btn-info">
+		<i class="fa fa-reply-all"></i>
+	</a>
+	<a type="button" title="Ajouter nouveau " class="btn btn-info">
+		<i class="fas fa-plus-circle"></i>
+	</a>
+	<a type="button" title="Modifier élément  " class="btn btn-info">
+		<i class="fas fa-edit"></i>
+	</a>
+	<a type="button" title="Supprimer élément" class="btn btn-info">
+		<i class="fas fa-trash"></i>
+	</a>
+{% endblock %}
+{% block titre %}
+	Mofdifier promotion
+{% endblock %}
+{% block positionnement %}
+	<span class="fa fa-angle-double-right"></span>
+	Config.
+	<span class="fa fa-angle-double-right"></span>
+	Promotion
+{% endblock %}
+{% block body %}
+	{{ include('promotion/_form.html.twig', {'button_label': 'Update'}) }}
+
+	<a href="{{ path('promotion_index') }}">back to list</a>
+
+	{{ include('promotion/_delete_form.html.twig') }}
+{% endblock %}

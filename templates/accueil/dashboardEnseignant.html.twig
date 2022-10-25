@@ -1,0 +1,166 @@
+{% extends 'base.html.twig' %}
+{% block titre %}
+	Academia Dashboard
+{% endblock %}
+{% block positionnement %}
+	<span class="fa fa-angle-double-right"></span>
+	DashBoard
+	<span class="fa fa-angle-double-right"></span>
+	Index
+{% endblock %}
+{% block body %}
+	<!-- Small boxes (Stat box) -->
+	<div class="row">
+		<div
+			class="   col-6">
+			<!-- Line chart -->
+			<div class="card card-primary card-outline">
+				<div class="card-header">
+					<h3 class="card-title">
+						<i class="far fa-chart-bar"></i>
+						Rapport global de mes travaux 
+					</h3>
+
+					<div class="card-tools">
+						<button type="button" class="btn btn-tool" data-card-widget="collapse">
+							<i class="fas fa-minus"></i>
+						</button>
+						<button type="button" class="btn btn-tool" data-card-widget="remove">
+							<i class="fas fa-times"></i>
+						</button>
+					</div>
+				</div>
+				<div class="card-body">
+					<div id="line-chart" style="height: 300px;">
+					<img src={{ asset('images/chart1.PNG')}} width="100%" />
+					</div>
+				</div>
+				<!-- /.card-body-->
+			</div>
+			<!-- /.card -->
+		</div>
+		<!-- ./col -->
+		<div
+			class="   col-6"><!-- small box -->
+<!-- Line chart -->
+			<div class="card card-primary card-outline">
+				<div class="card-header">
+					<h3 class="card-title">
+						<i class="far fa-chart-bar"></i>
+						Rapport entre dépot et feux vert
+					</h3>
+
+					<div class="card-tools">
+						<button type="button" class="btn btn-tool" data-card-widget="collapse">
+							<i class="fas fa-minus"></i>
+						</button>
+						<button type="button" class="btn btn-tool" data-card-widget="remove">
+							<i class="fas fa-times"></i>
+						</button>
+					</div>
+				</div>
+				<div class="card-body">
+					<div id="line-chart" style="height: 300px;">
+						<img src={{ asset('images/chart2.PNG')}} width="100%" />
+					</div>
+				</div>
+				<!-- /.card-body-->
+			</div>
+			<!-- /.card -->
+		</div>
+		<!-- ./col -->
+		<!-- ./col -->
+	</div>
+
+	<div class="row">
+	<div class="col col-12">
+		<table id="example1" class="table table-bordered table-striped">
+		<legend> Historique des dépots </legend>
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Etudiant</th>
+					<th>Promotion</th>
+					<th>Statut Fiche</th>
+					<th>actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for fiche in fiches %}
+					<tr>
+						<td>{{ loop.index }}</td>
+						<td>{{ fiche.finaliste }}</td>
+						<td>{{ fiche.promotion }}</td>
+						<td>
+							{% if fiche.etatFiche==1 %}
+								<span class="badge badge-danger">
+									En attente de soumission
+								</span>
+							{% elseif fiche.etatFiche==2 %}
+								<span class="badge badge-danger">
+									En attente de traitement/validation
+								</span>
+							{% elseif fiche.etatFiche==3 %}
+								<span class="badge badge-warning">
+									En cours de redaction
+								</span>
+							{% elseif fiche.etatFiche==4 %}
+								<span class="badge badge-success">
+									En mode feux vert, atttente alignement
+								</span>
+							{% elseif fiche.etatFiche==5 %}
+								<span class="badge badge-info">
+									En attente de défense
+								</span>
+							{% elseif fiche.etatFiche==6 %}
+								<span class="badge badge-primary">
+									Défendu
+								</span>
+							{% endif %}
+						</td>
+						<td>
+							<div class="btn-group">
+								<a title="Voir la fiche" class="btn btn-default btn-sm" href="{{ path('fiche_show', {'id': fiche.id}) }}">
+									<span class="fas fa-search-plus"></span>
+								</a>
+								{% if is_granted('ROLE_ADMIN') %}
+									{% if not fiche.isValidee %}
+										<a title="traiter et valider" class="btn btn-default btn-sm" href="{{ path('fiche_traiter', {'id': fiche.id}) }}">
+											<span class="fas fa-toggle-off"></span>
+										</a>
+									{% endif %}
+								{% elseif is_granted('ROLE_FINALISTE') %}
+									{% if not fiche.isSoumis %}
+										<a href="{{ path('fiche_soumettre', {'id': fiche.id}) }}">soumettre</a>
+										{% if not fiche.isValidee %}
+											<a href="{{ path('fiche_edit', {'id': fiche.id}) }}">modifier</a>
+										{% endif %}
+									{% endif %}
+								{% elseif is_granted('ROLE_ENSEIGNANT') %}
+									{% if not fiche.isFeuxVert %}
+										<a href="{{ path('fiche_feux_vert', {'id': fiche.id}) }}">feux vert</a>
+									{% endif %}
+									{# <a href="{{ path('depot_index_etudiant', {'id': fiche.id}) }}">voir les dépot</a> #}
+
+								{% endif %}
+								{% if fiche.isFeuxVert%}
+									<a href="{{ path('fiche_print', {'id': fiche.id}) }}" target="_blank">imprimer</a>
+								{% endif %}
+							</div>
+						</td>
+					</tr>
+				{% else %}
+					<tr>
+						<td colspan="7"class="text-warning">aucun élément trouvé</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+
+</div>
+
+	</div>
+
+
+{% endblock %}
+

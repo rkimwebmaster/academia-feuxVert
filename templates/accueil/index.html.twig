@@ -1,0 +1,108 @@
+{% extends 'base.html.twig' %}
+{% block titre %}
+	Calendrier générale des défenses
+{% endblock %}
+{% block lesboutons %}{% endblock %}
+{% block positionnement %}
+	<span class="fa fa-angle-double-right"></span>
+	DashBoard
+	<span class="fa fa-angle-double-right"></span>
+	Calendrier
+{% endblock %}
+
+{% block body %}
+	<!-- Small boxes (Stat box) -->
+	<div class="row">
+		<div
+			class="col-lg-3 col-6">
+			<!-- small box -->
+			<div class="small-box bg-info">
+				<div class="inner">
+					<h3>{{entreprise.dateFinPropositionSujet|date('d-M-Y')}}</h3>
+
+					<p>Fin proposition sujet
+					</p>
+				</div>
+				<div class="icon">
+					<i class="fa fa-graduation-cap"></i>
+				</div>
+				<a href="#" class="small-box-footer">Voir plus
+					<i class="fas fa-arrow-circle-right"></i>
+				</a>
+			</div>
+		</div>
+		<!-- ./col -->
+		<div
+			class="col-lg-3 col-6">
+			<!-- small box -->
+			<div class="small-box bg-info">
+				<div class="inner">
+					<h3>{{entreprise.dateDebutDefenseSession1|date('d-M-Y')}}
+					</h3>
+
+					<p>Début défense 1ere session</p>
+				</div>
+				<div class="icon">
+					<i class="fa fa-graduation-cap"></i>
+				</div>
+				<a href="#" class="small-box-footer">Voir plus
+					<i class="fas fa-arrow-circle-right"></i>
+				</a>
+			</div>
+		</div>
+		<!-- ./col -->
+		<div
+			class="col-lg-3 col-6">
+			<!-- small box -->
+			<div class="small-box bg-info">
+				<div class="inner">
+					<h3>{{entreprise.dateCollationGrade|date('d-M-Y')}}</h3>
+
+					<p>Collation de grade
+					</p>
+				</div>
+				<div class="icon">
+					<i class="fa fa-graduation-cap"></i>
+				</div>
+				<a href="#" class="small-box-footer">Voir plus
+					<i class="fas fa-arrow-circle-right"></i>
+				</a>
+			</div>
+		</div>
+		<!-- ./col -->
+		<div
+			class="col-lg-3 col-6">
+			<!-- small box -->
+			<div class="small-box bg-info">
+				<div class="inner">
+					<h3>{{entreprise.dateDebutDefenseSession2|date('d-M-Y')}}</h3>
+
+					<p>Début défense 2eme session</p>
+				</div>
+				<div class="icon">
+					<i class="fa fa-graduation-cap"></i>
+				</div>
+				<a href="#" class="small-box-footer">Voir plus
+					<i class="fas fa-arrow-circle-right"></i>
+				</a>
+			</div>
+		</div>
+		<!-- ./col -->
+	</div>
+
+	<section class="content">
+		<div class="container-fluid">
+			<div class="alert alert-info alert-dismissible fade show" role="alert">
+				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+				<strong>
+					<i class="icon fas fa-ban"></i>
+					Frais de dépot
+					{{entreprise.anneeAcademiqueCourante}}
+				</strong>
+				<mark>{{entreprise.monaie}}
+					{{entreprise.prixDepot}}</mark>
+			</div>
+		</div>
+	</section>
+
+{% endblock %}

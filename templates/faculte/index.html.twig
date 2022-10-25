@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Faculte index
+{% endblock %}
+{% block lesboutons %}
+	<a href="{{ path('faculte_new') }}"  title="Ajouter nouveau " class="btn btn-info">
+		<i class="fas fa-plus-circle"></i>
+	</a>
+{% endblock %}
+{% block titre %}
+	Liste des facultés
+{% endblock %}
+
+{% block positionnement %}
+	<span class="fa fa-angle-double-right"></span>
+	Config.
+	<span class="fa fa-angle-double-right"></span>
+	Faculté 
+{% endblock %}
+{% block body %}
+
+	<table id="example1" class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Désignation
+				</th>
+				<th>Decsription
+				</th>
+				<th>actions</th>
+			</tr>
+		</thead>
+		<tfoot>
+			<tr>
+				<th>#</th>
+				<th>Designation
+				</th>
+				<th>Decsription
+				</th>
+				<th>actions</th>
+			</tr>
+		</tfoot>
+		<tbody>
+			{% for faculte in facultes %}
+				<tr>
+					<td>{{ loop.index }}</td>
+					<td>{{ faculte.designation }}</td>
+					<td>{{ faculte.description }}</td>
+					<td>
+						<a href="{{ path('faculte_show', {'id': faculte.id}) }}"class="btn btn-default btn-sm"><span class="fa fa-search-plus"></span></a>
+						<a href="{{ path('faculte_edit', {'id': faculte.id}) }}"class="btn btn-default btn-sm"><span class="fa fa-edit"></span></a>
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="4"class="text-warning">aucun élément trouvé</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}

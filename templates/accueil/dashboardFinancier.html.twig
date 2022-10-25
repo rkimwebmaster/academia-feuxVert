@@ -1,0 +1,263 @@
+{% extends 'base.html.twig' %}
+{% block titre %}
+	Academia Dashboard
+{% endblock %}
+
+{% block positionnement %}
+	<span class="fa fa-angle-double-right"></span>
+	DashBoard
+	<span class="fa fa-angle-double-right"></span>
+	Index
+{% endblock %}
+{% block body %}
+	<!-- Small boxes (Stat box) -->
+	<div class="row">
+		<div
+			class="col-lg-3 col-6">
+			<!-- small box -->
+			<div class="small-box bg-info">
+				<div class="inner">
+					<h3>{{app.user.faculte.nombreFicheCree}}</h3>
+
+					<p>Crée(s)</p>
+				</div>
+				<div class="icon">
+					<i class="ion ion-bag"></i>
+				</div>
+				<a href="#" class="small-box-footer">Voir plus
+					<i class="fas fa-arrow-circle-right"></i>
+				</a>
+			</div>
+		</div>
+		<!-- ./col -->
+		<div
+			class="col-lg-3 col-6">
+			<!-- small box -->
+			<div class="small-box bg-success">
+				<div class="inner">
+					<h3>{{app.user.faculte.nombreFicheSoumis}}
+					</h3>
+
+					<p>Fiche(s) soumise(s)</p>
+				</div>
+				<div class="icon">
+					<i class="ion ion-stats-bars"></i>
+				</div>
+				<a href="#" class="small-box-footer">Voir plus
+					<i class="fas fa-arrow-circle-right"></i>
+				</a>
+			</div>
+		</div>
+		<!-- ./col -->
+		<div
+			class="col-lg-3 col-6">
+			<!-- small box -->
+			<div class="small-box bg-warning">
+				<div class="inner">
+					<h3>{{app.user.faculte.nombreFicheValidee}}</h3>
+
+					<p>Validée</p>
+				</div>
+				<div class="icon">
+					<i class="ion ion-person-add"></i>
+				</div>
+				<a href="#" class="small-box-footer">Voir plus
+					<i class="fas fa-arrow-circle-right"></i>
+				</a>
+			</div>
+		</div>
+		<!-- ./col -->
+		<div
+			class="col-lg-3 col-6">
+			<!-- small box -->
+			<div class="small-box bg-danger">
+				<div class="inner">
+					<h3>{{app.user.faculte.nombreFicheFeuxVert}}</h3>
+
+					<p>fiches en mode feux vert</p>
+				</div>
+				<div class="icon">
+					<i class="ion ion-pie-graph"></i>
+				</div>
+				<a href="#" class="small-box-footer">Voir plus
+					<i class="fas fa-arrow-circle-right"></i>
+				</a>
+			</div>
+		</div>
+		<!-- ./col -->
+	</div>
+	<div class="row">
+		<div
+			class="col-lg-3 col-6">
+			<!-- small box -->
+			<div class="small-box bg-info">
+				<div class="inner">
+					<h3>{{app.user.faculte.nombreFicheAlignee}}</h3>
+
+					<p>Alignée(s)</p>
+				</div>
+				<div class="icon">
+					<i class="ion ion-bag"></i>
+				</div>
+				<a href="#" class="small-box-footer">Voir plus
+					<i class="fas fa-arrow-circle-right"></i>
+				</a>
+			</div>
+		</div>
+		<!-- ./col -->
+		<div
+			class="col-lg-3 col-6">
+			<!-- small box -->
+			<div class="small-box bg-success">
+				<div class="inner">
+					<h3>{{app.user.faculte.nombreFicheDefendu}}
+					</h3>
+
+					<p>Fiches défendu</p>
+				</div>
+				<div class="icon">
+					<i class="ion ion-stats-bars"></i>
+				</div>
+				<a href="#" class="small-box-footer">Voir plus
+					<i class="fas fa-arrow-circle-right"></i>
+				</a>
+			</div>
+		</div>
+		<!-- ./col -->
+		<div
+			class="col-lg-3 col-6">
+			<!-- small box -->
+			<div class="small-box bg-warning">
+				<div class="inner">
+					<h3>
+						{% if not app.user.faculte.nombreFicheFeuxVert == 0 %}
+							{{app.user.faculte.nombreFicheValidee / app.user.faculte.nombreFicheFeuxVert * 100}}
+						{% else %}
+							0
+						{% endif %}
+						<sup style="font-size: 20px">%</sup>
+					</h3>
+
+					<p>
+						Taux validé/ feux vert
+					</p>
+				</div>
+				<div class="icon">
+					<i class="ion ion-person-add"></i>
+				</div>
+				<a href="#" class="small-box-footer">Voir plus
+					<i class="fas fa-arrow-circle-right"></i>
+				</a>
+			</div>
+		</div>
+		<!-- ./col -->
+		<div
+			class="col-lg-3 col-6">
+			<!-- small box -->
+			<div class="small-box bg-danger">
+				<div class="inner">
+					<h3>65</h3>
+
+					<p>Etudiant(s) enregistré(s)</p>
+				</div>
+				<div class="icon">
+					<i class="ion ion-pie-graph"></i>
+				</div>
+				<a href="#" class="small-box-footer">Voir plus
+					<i class="fas fa-arrow-circle-right"></i>
+				</a>
+			</div>
+		</div>
+		<!-- ./col -->
+	</div>
+
+
+	<div class="row">
+	<div class="col col-12">
+
+		<table id="example1" class="table table-bordered table-striped">
+		<legend> Tous les mémoires  </legend>
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Etudiant</th>
+					<th>Promotion</th>
+					<th>Statut Fiche</th>
+					<th>actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for fiche in fiches %}
+					<tr>
+						<td>{{ loop.index }}</td>
+						<td>{{ fiche.finaliste }}</td>
+						<td>{{ fiche.promotion }}</td>
+						<td>
+							{% if fiche.etatFiche==1 %}
+								<span class="badge badge-danger">
+									En attente de soumission
+								</span>
+							{% elseif fiche.etatFiche==2 %}
+								<span class="badge badge-danger">
+									En attente de traitement/validation
+								</span>
+							{% elseif fiche.etatFiche==3 %}
+								<span class="badge badge-warning">
+									En cours de redaction
+								</span>
+							{% elseif fiche.etatFiche==4 %}
+								<span class="badge badge-success">
+									En mode feux vert, atttente alignement
+								</span>
+							{% elseif fiche.etatFiche==5 %}
+								<span class="badge badge-info">
+									En attente de défense
+								</span>
+							{% elseif fiche.etatFiche==6 %}
+								<span class="badge badge-primary">
+									Défendu
+								</span>
+							{% endif %}
+						</td>
+						<td>
+							<div class="btn-group">
+								<a title="Voir la fiche" class="btn btn-default btn-sm" href="{{ path('fiche_show', {'id': fiche.id}) }}">
+									<span class="fas fa-search-plus"></span>
+								</a>
+								{% if is_granted('ROLE_ADMIN') %}
+									{% if not fiche.isValidee %}
+										<a title="traiter et valider" class="btn btn-default btn-sm" href="{{ path('fiche_traiter', {'id': fiche.id}) }}">
+											<span class="fas fa-toggle-off"></span>
+										</a>
+									{% endif %}
+								{% elseif is_granted('ROLE_FINALISTE') %}
+									{% if not fiche.isSoumis %}
+										<a href="{{ path('fiche_soumettre', {'id': fiche.id}) }}">soumettre</a>
+										{% if not fiche.isValidee %}
+											<a href="{{ path('fiche_edit', {'id': fiche.id}) }}">modifier</a>
+										{% endif %}
+									{% endif %}
+								{% elseif is_granted('ROLE_ENSEIGNANT') %}
+									{% if not fiche.isFeuxVert %}
+										<a href="{{ path('fiche_feux_vert', {'id': fiche.id}) }}">feux vert</a>
+									{% endif %}
+									{# <a href="{{ path('depot_index_etudiant', {'id': fiche.id}) }}">voir les dépot</a> #}
+
+								{% endif %}
+								{% if fiche.isFeuxVert%}
+									<a href="{{ path('fiche_print', {'id': fiche.id}) }}" target="_blank">imprimer</a>
+								{% endif %}
+							</div>
+						</td>
+					</tr>
+				{% else %}
+					<tr>
+						<td colspan="7"class="text-warning">aucun élément trouvé</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+
+	</div>
+	</div>
+{% endblock %}

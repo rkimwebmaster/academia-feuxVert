@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New BroadcastMessage{% endblock %}
+{% block lesboutons %}
+	<a  href="{{ path('broadcast_message_index') }}" title="Retour à la liste " class="btn btn-info">
+		<i class="fa fa-reply-all"></i>
+	</a>
+{% endblock %}
+{% block titre %}
+	{% if is_granted('ROLE_ENSEIGNANT') %}
+	Envoie d'un message de large diffusion à vos dirigés 
+	{% else %}
+		Envoie d'un message de large diffusion 
+	{% endif %}
+{% endblock %}
+{% block positionnement %}
+	<span class="fa fa-angle-double-right"></span>
+	Message  
+	<span class="fa fa-angle-double-right"></span>
+	Broadcast 
+{% endblock %}
+{% block body %}
+    {{ include('broadcast_message/_form.html.twig') }}
+{% endblock %}

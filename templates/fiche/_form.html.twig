@@ -1,0 +1,30 @@
+{{ form_start(form) }}
+<div class="row">
+	{# <div class="col-md-4">
+		<div class="form-group">
+			{{ form_row(form.numero) }}
+		</div>
+	</div> #}
+	<div class="col-md-4">
+		<div class="form-group">
+			{{ form_row(form.directeurPropose, {attr:{class:'select2bs4'}}) }}
+		</div>
+	</div>
+	<div class="col-md-4">
+			<div class="form-group-check">
+		{{ form_row(form.isSoumis, {label_attr:{class:'switch-custom'}}) }}
+	</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12 col ">
+		{{ form_row(form.propositions, {label_attr:{class:'switch-custom'}}) }}
+	</div>
+</div>
+{{ form_widget(form) }}
+<button class="btn btn-default ">
+	<span class="fa fa-download"></span>
+	{{ button_label|default('Enregistrer') }}</button>
+
+	
+{{ form_end(form) }}

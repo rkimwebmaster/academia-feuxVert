@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New LignePlanification{% endblock %}
+
+{% block body %}
+    <h1>Create new LignePlanification</h1>
+
+    {{ include('ligne_planification/_form.html.twig') }}
+
+    <a href="{{ path('ligne_planification_index') }}">back to list</a>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit BroadcastMessage{% endblock %}
+
+{% block body %}
+    <h1>Edit BroadcastMessage</h1>
+
+    {{ include('broadcast_message/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('broadcast_message_index') }}">back to list</a>
+
+    {{ include('broadcast_message/_delete_form.html.twig') }}
+{% endblock %}

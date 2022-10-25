@@ -1,0 +1,145 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des utilisateurs
+{% endblock %}
+{% block lesboutons %}
+{% if is_granted('ROLE_IT') %}
+	<a href="{{ path('app_register_sa') }}" title="Ajouter super admin  " class="btn btn-info btn-danger">
+		<i class="fas fa-plus-circle"></i>
+	</a>
+	{% endif %}
+{% if is_granted('ROLE_IT') or is_granted('ROLE_ADMIN') %}
+	<a href="{{ path('app_register_fac') }}" title="Ajouter admin de faculté  " class="btn btn-warning ">
+		<i class="fas fa-plus-circle"></i>
+	</a>
+	<a href="{{ path('app_register_enseignant') }}" title="Ajouter enseignant " class="btn btn-primary ">
+		<i class="fas fa-plus-circle"></i>
+	</a>
+	<a href="{{ path('app_register_finaliste') }}" title="Ajouter finaliste " class="btn btn-success ">
+		<i class="fas fa-plus-circle"></i>
+	</a>
+	{% endif %}
+{% endblock %}
+{% block titre %}
+	Liste des utilisateurs
+{% endblock %}
+
+{% block positionnement %}
+	<span class="fa fa-angle-double-right"></span>
+	Config.
+	<span class="fa fa-angle-double-right"></span>
+	Utilisateurs
+{% endblock %}
+{% block body %}
+	<table id="example1" class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Nom utilisateur </th>
+				<th>Roles</th>
+				<th>Email</th>
+				<th>actions</th>
+			</tr>
+		</thead>
+		<tfoot>
+			<tr>
+				<th>#</th>
+				<th>Nom utilisateur</th>
+				<th>Roles</th>
+				<th>Email</th>
+				<th>actions</th>
+			</tr>
+		</tfoot>
+		<tbody>
+			{% set continue = false %}
+			{% for user in users %}
+				{% if user == app.user %}
+					{% set continue = true %}
+				{% endif %}
+				{% if not continue %}
+
+					<tr>
+						<td>{{ loop.index }}</td>
+						<td>{{ user.username }}</td>
+						<td>
+							{# {{ user.roles ? user.roles|json_encode : '' }} #}
+
+							{% set flag = '' %}
+							{% for userRight in user.roles %}
+								{% if userRight == 'ROLE_IT' and flag != 1 %}
+									<span class="badge badge-danger" title="Veuillez à gerer le système en temps réel ">
+										User admin WTB
+									</span>
+									{% set flag = 1 %}
+								{% elseif userRight == 'ROLE_ENSEIGNANT' and flag != 1 %}
+									<span class="badge badge-success" title="Veuillez à gerer le système en temps réel ">
+										enseignant de faculté
+									</span>
+									{% set flag = 1 %}
+								{% elseif userRight == 'ROLE_FINALISTE' and flag != 1 %}
+									<span class="badge badge-info" title="Veuillez à gerer le système en temps réel ">
+										étudiant de faculté
+									</span>
+									{% set flag = 1 %}
+								{% elseif userRight == 'ROLE_ADMIN' and flag != 1 %}
+									<span class="badge badge-dark" title="Veuillez à gerer le système en temps réel ">
+										admin de faculté AFC
+									</span>
+									{% set flag = 1 %}
+								{% elseif userRight == 'ROLE_FINANCIER' and flag != 1 %}
+									<span class="badge badge-warning" title="Veuillez à gerer le système en temps réel ">
+										financier de faculté
+									</span>
+									{% set flag = 1 %}
+								{% endif %}
+							{% endfor %}
+
+						</td>
+						<td>
+							<a title="envoyer un mail" href="mailto:{{user.email}}">
+								<span class="fa fa-envelope"></span>
+							</a>
+							{{ user.email }}</td>
+						<td>
+							<div class="btn-group">
+								<a title="Voir détail" class="btn btn-default btn-sm" href="{{ path('profile', {'id': user.id}) }}">
+									<span class="fa fa-search-plus"></span>
+								</a>
+								<a title="Changer le mot de passe user"  class="btn btn-default btn-sm" href="{{ path('user_change_pass_admin', {'id': user.id}) }}">
+									<span class="fa fa-key"></span>
+									
+								</a>
+
+								{% set flag = '' %}
+								{% for userRight in user.roles %}
+									{% if userRight == 'ROLE_ENSEIGNANT' and flag != 1 %}
+										{% if user.enseignant==null%}
+											{# <a title="Completer les infos supplémentaires " class="btn btn-default btn-sm" href="{{ path('enseignant_new', {'id': user.id}) }}">
+												<span class="fa fa-clipboard"></span>
+											</a> #}
+										{% endif %}
+										{% set flag = 1 %}
+									{% elseif userRight == 'ROLE_FINALISTE' and flag != 1 %}
+										{% if user.finaliste==null%}
+											{# <a title="Completer les infos supplémentaires " class="btn btn-default btn-sm" href="{{path('finaliste_new', {'id': user.id})}}">
+												<span class="fa fa-clipboard"></span>
+											</a> #}
+										{% endif %}
+										{% set flag = 1 %}
+									{% endif %}
+								{% endfor %}
+							</div>
+						</td>
+					</tr>
+				{% endif %}
+				{% if continue %}
+					{% set continue = false %}
+				{% endif %}
+			{% else %}
+				<tr>
+					<td colspan="5" class="text-warning">aucun élément trouvé</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}

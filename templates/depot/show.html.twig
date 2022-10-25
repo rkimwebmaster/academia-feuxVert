@@ -1,0 +1,157 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Depot
+{% endblock %}
+{% block titre %}
+	Détail de dépot
+{% endblock %}
+{% block lesboutons %}
+	<a href="{{ path('depot_index') }}" title="Retour à la liste " class="btn btn-info">
+		<i class="fa fa-reply-all"></i>
+	</a>
+	{% if is_granted('ROLE_FINALISTE') %}
+		<a href="{{url('depot_new')}}" title="Nouveau dépot " class="btn btn-info">
+			<i class="fas fa-plus-circle"></i>
+		</a>
+		{% if not depot.isCorrige %}
+		<a href="{{ path('depot_edit', {'id': depot.id}) }}" title="Modifier élément  " class="btn btn-info">
+			<i class="fas fa-edit"></i>
+		</a>
+		{% endif %}
+	{% endif %}
+{% endblock %}
+{% block positionnement %}
+	<span class="fa fa-angle-double-right"></span>
+	Fiche
+	<span class="fa fa-angle-double-right"></span>
+	Aperçu
+{% endblock %}
+
+{% block body %}
+
+	<h3 class="text-uppercase">Dépot &#x2116;
+		{{depot.id}}</h3>
+	<div class="row">
+		<div class="col-sm-6 col-6">
+			Etudiant
+			<address>
+				<strong>{{depot.fiche.finaliste.civilite }}
+					{{depot.fiche.finaliste|upper }}</strong>
+				<br>
+				Promotion :
+				{{depot.fiche.finaliste.promotion|upper}}
+				<br>
+				<a href="tel:{{depot.fiche.finaliste.identite.telephone}}">
+					<span class="fa fa-phone"></span>
+				</a>
+				: (+243)
+				{{depot.fiche.finaliste.identite.telephone}}<br>
+				<a href="tel:{{depot.fiche.finaliste.user.email}}">
+					<span class="fa fa-envelope"></span>
+				</a>
+				:
+				{{depot.fiche.finaliste.user.email}}
+				<br>
+			</address>
+		</div>
+		<div class="col-sm-6 col-6 float-right ">
+			{% if depot.fiche.isValidee %}
+				Directeur
+				<address>
+					<strong>{{depot.fiche.directeurRetenu.grade}}
+						{{depot.fiche.directeurRetenu|upper}}</strong><br>
+					<a href="tel:{{depot.fiche.directeurRetenu.identite.telephone}}">
+						<span class="fa fa-phone"></span>
+					</a>
+					: (+243)
+					{{depot.fiche.directeurRetenu.identite.telephone}}<br>
+					{% if depot.fiche.directeurRetenu.user %}
+						<a href="tel:{{depot.fiche.directeurRetenu.user.email}}">
+							<span class="fa fa-envelope"></span>
+						</a>
+					{% endif %}
+					:
+					{% if depot.fiche.directeurRetenu.user %}
+						{{depot.fiche.directeurRetenu.user.email}}
+					{% endif %}
+				</address>
+			{% else %}
+				Directeur proposé
+				<address>
+					<strong>{{depot.fiche.directeurPropose.grade}}
+						{{depot.fiche.directeurPropose|upper}}</strong><br>
+					<a href="tel:{{depot.fiche.directeurPropose.identite.telephone}}">
+						<span class="fa fa-phone"></span>
+					</a>
+					: (+243)
+					{{depot.fiche.directeurPropose.identite.telephone}}<br>
+					{% if depot.fiche.directeurPropose.user %}
+						<a href="tel:{{depot.fiche.directeurPropose.user.email}}">
+							<span class="fa fa-envelope"></span>
+						</a>
+					{% endif %}
+					:
+					{% if depot.fiche.directeurPropose.user %}
+						{{depot.fiche.directeurPropose.user.email}}
+					{% endif %}
+				</address>
+			{% endif %}
+		</div>
+	</div>
+	<h6>
+		<i>
+			Date dépot :
+			{{depot.date|date('d/M/Y')}}
+		</i>
+		/ Date correction:
+		{{depot.dateCorrection|date('d/M/Y')}}
+		/ Statut:
+		{% if depot.isCorrige %}
+			<span class="fa fa-check-circle text-success"></span>
+		{% else %}
+			<span class="fa fa-times text-success"></span>
+		{% endif %}
+	</h6>
+	<h4 class="text-muted" >Partie concernée : {{depot.titre }}</h4>
+	<table class="table">
+		<tbody>
+			<tr>
+				<th>Fichier étudiant
+				</th>
+				<td>
+					<a href="{{asset('uploads/brochures/'~depot.fichier)}}">{{ depot.fichier }}</a>
+				</td>
+			</tr>
+			{% if depot.fichierCorrigeDirecteur %}
+			<tr>
+				<th>Fichier enseignant
+				</th>
+				<td>
+					<a href="{{asset('uploads/brochures/'~depot.fichierCorrigeDirecteur)}}">{{ depot.fichierCorrigeDirecteur }}</a>
+				</td>
+			</tr>
+			{% endif %}
+			<tr>
+				<th>Note de l'étudiant</th>
+				<td>{{ depot.noteEtudiant|raw }}</td>
+			</tr>
+			<tr>
+				<th>Note du Directeur</th>
+				<td>{{ depot.noteDirecteur|raw }}</td>
+			</tr>
+		</tbody>
+	</table>
+	{% if not is_granted('ROLE_ENSEIGNANT')%}
+		{% if not depot.isCorrige %}
+			{{ include('depot/_delete_form.html.twig') }}
+		{% endif %}
+	{% endif %}
+	{% if is_granted('ROLE_ENSEIGNANT')%}
+		{% if not depot.isCorrige %}
+			<a title="Corrigez le dépot étudiant" class="btn btn-default btn-sm" href="{{ path('depot_edit_enseignant', {'id': depot.id}) }}">
+				<span class="fa fa-reply-all"></span>
+				Corriger
+			</a>
+		{% endif %}
+	{% endif %}
+{% endblock %}

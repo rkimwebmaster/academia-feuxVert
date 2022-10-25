@@ -1,0 +1,97 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Fiche index
+{% endblock %}
+{% block titre %}
+	Toutes les fiches
+{% endblock %}
+{% block lesboutons %}
+	<a title="Retour à la liste " class="btn btn-info">
+		<i class="fa fa-reply-all"></i>
+	</a>
+	<a type="button" href="{{url('fiche_new')}}" title="Ajouter nouveau " class="btn btn-info">
+		<i class="fas fa-plus-circle"></i>
+	</a>
+	<a type="button" title="Modifier élément  " class="btn btn-info">
+		<i class="fas fa-edit"></i>
+	</a>
+	<a type="button" title="Supprimer élément" class="btn btn-info">
+		<i class="fas fa-trash"></i>
+	</a>
+{% endblock %}
+{% block positionnement %}
+	<span class="fa fa-angle-double-right"></span>
+	Fiche
+	<span class="fa fa-angle-double-right"></span>
+	Paiement dépot
+{% endblock %}
+
+{% block body %}
+	<table id="example1" class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Etudiant</th>
+				<th>Promotion</th>
+				<th>Statut Fiche</th>
+				<th>actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for fiche in fiches %}
+				<tr>
+					<td>{{ loop.index }}</td>
+					<td>{{ fiche.finaliste }}
+					{% if fiche.isPaiementDepot %}
+					<span class="fa fa-calculator text-success"> </span>
+					{% endif %}
+					</td>
+					<td>{{ fiche.promotion }}</td>
+					<td>
+						{% if fiche.etatFiche==1 %}
+							<span class="badge badge-danger">
+								En attente de soumission
+							</span>
+						{% elseif fiche.etatFiche==2 %}
+							<span class="badge badge-danger">
+								En attente de traitement/validation
+							</span>
+						{% elseif fiche.etatFiche==3 %}
+							<span class="badge badge-warning">
+								En cours de redaction
+							</span>
+						{% elseif fiche.etatFiche==4 %}
+							<span class="badge badge-success">
+								En mode feux vert, atttente alignement
+							</span>
+						{% elseif fiche.etatFiche==5 %}
+							<span class="badge badge-info">
+								En attente de défense
+							</span>
+						{% elseif fiche.etatFiche==6 %}
+							<span class="badge badge-primary">
+								Défendu
+							</span>
+						{% endif %}
+					</td>
+					<td>
+						<div class="btn-group">
+							<a title="Voir la fiche" class="btn btn-default btn-sm" href="{{ path('fiche_show', {'id': fiche.id}) }}">
+								<span class="fas fa-search-plus"></span>
+							</a>
+							{% if not fiche.isPaiementDepot %}
+							<a title="Payer " class="btn btn-default btn-sm" href="{{ path('paiement_depot_new', {'id': fiche.id}) }}">
+								<span class="fas fa-calculator "></span>
+							</a>
+							{% endif %}
+						</div>
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="7"class="text-warning">aucun élément trouvé</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}

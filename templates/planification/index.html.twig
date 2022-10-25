@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Planification liste {% endblock %}
+{% block titre %}
+	Toutes les palanification
+{% endblock %}
+{% block lesboutons %}
+	<a href="{{ path('planification_new') }}" title="Ajouter nouveau " class="btn btn-info">
+		<i class="fas fa-plus-circle"></i>
+	</a>
+{% endblock %}
+{% block positionnement %}
+	<span class="fa fa-angle-double-right"></span>
+	Planification
+	<span class="fa fa-angle-double-right"></span>
+	Liste
+{% endblock %}
+
+{% block body %}
+	<table id="example1" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Date</th>
+                <th>Salle </th>
+                <th>Nombre de defenses </th>
+                <th>Is Validee</th>
+                <th>Observation</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th>#</th>
+                <th>Date</th>
+                <th>Salle </th>
+                <th>Nombre de defenses </th>
+                <th>Is Validee</th>
+                <th>Observation</th>
+                <th>actions</th>
+            </tr>
+        </tfoot>
+        <tbody>
+        {% for planification in planifications %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ planification.date ? planification.date|date('d-M-Y ') : '' }}</td>
+                <td>{{ planification.salle  }}</td>
+                <td>{{ planification.lignePlanifications|length }}</td>
+                <td>{{ planification.isValidee ? 'Yes' : 'No' }}</td>
+                <td>{{ planification.observation }}</td>
+                <td>
+                <div class="btn-group">
+                    <a href="{{ path('planification_show', {'id': planification.id}) }}"class="btn btn-default btn-sm"><span class="fa fa-search-plus"></span></a>
+                    {# <a href="{{ path('planification_edit', {'id': planification.id}) }}"class="btn btn-default btn-sm"><span class="fa fa-edit"></span></a> #}
+                </div>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7"class="text-warning">aucun élément trouvé</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

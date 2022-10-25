@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}BroadcastMessage index
+{% endblock %}
+
+{% block lesboutons %}
+	<a title="Retour à la liste " class="btn btn-info">
+		<i class="fa fa-reply-all"></i>
+	</a>
+	<a type="button" title="Ajouter nouveau " href="{{ path('broadcast_message_new') }}" class="btn btn-info">
+		<i class="fas fa-plus-circle"></i>
+	</a>
+	<a type="button" title="Modifier élément  " class="btn btn-info">
+		<i class="fas fa-edit"></i>
+	</a>
+	<a type="button" title="Supprimer élément" class="btn btn-info">
+		<i class="fas fa-trash"></i>
+	</a>
+{% endblock %}
+{% block titre %}
+	Messages de broadcast
+{% endblock %}
+{% block positionnement %}
+	<span class="fa fa-angle-double-right"></span>
+	Config.
+	<span class="fa fa-angle-double-right"></span>
+	Broadcast
+{% endblock %}
+{% block body %}
+	<table id="example1" class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Date</th>
+				<th>Titre</th>
+				<th>Contenu</th>
+				<th>Groupe Destinataire</th>
+			</tr>
+		</thead>
+        <tfoot>
+			<tr>
+				<th>#</th>
+				<th>Date</th>
+				<th>Titre</th>
+				<th>Contenu</th>
+				<th>Groupe Destinataire</th>
+			</tr>
+		</tfoot>
+		<tbody>
+			{% for broadcast_message in broadcast_messages %}
+				<tr>
+					<td>{{ loop.index }}</td>
+					<td>{{ broadcast_message.createdAt ? broadcast_message.createdAt|date('d-M-Y H:i:s') : '' }}</td>
+					<td>{{ broadcast_message.titre }}</td>
+					<td>{{ broadcast_message.contenu|raw }}</td>
+					<td>{{ broadcast_message.groupeDestinataire }}</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="6">no records found</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}

@@ -1,0 +1,206 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Fiche
+{% endblock %}
+{% block lesboutons %}
+	<a href="{{ path('fiche_index') }}" title="Retour à la liste " class="btn btn-info">
+		<i class="fa fa-reply-all"></i>
+	</a>
+	{% if is_granted('ROLE_ADMIN') %}
+	<a title="Modifier " class="btn btn-default btn-sm" href="{{ path('fiche_edit', {'id': fiche.id}) }}">
+		<span class="fa fa-edit"></span>
+	</a>
+	{% endif %}
+{% endblock %}
+{% block titre %}
+	Détail de la fiche
+	{# {{include('_etatFiche.html.twig')}} #}
+{% endblock %}
+{% block positionnement %}
+	<span class="fa fa-angle-double-right"></span>
+	Fiche
+	<span class="fa fa-angle-double-right"></span>
+	Détail
+{% endblock %}
+{% block body %}
+
+	<h3 class="text-uppercase">Fiche d'état d'avancement de mémoire &#x2116;
+		{{fiche.id}}/{{fiche.faculte|u.truncate(3)}}/{{fiche.promotion.departement|u.truncate(3)}}/{{entreprise.anneeAcademiqueCourante}}</h3>
+	<div class="row">
+		<div class="col-sm-6 col-6">
+			Etudiant
+			<address>
+				<strong>{{fiche.finaliste.civilite }}
+					{{fiche.finaliste|upper }}</strong>
+				<br>
+				Promotion :
+				{{fiche.finaliste.promotion|capitalize}}
+				<br>
+				<a href="tel:{{fiche.finaliste.identite.telephone}}">
+					<span class="fa fa-phone"></span>
+				</a>
+				: (+243)
+				{{fiche.finaliste.identite.telephone}}<br>
+				<a href="tel:{{fiche.finaliste.user.email}}">
+					<span class="fa fa-envelope"></span>
+				</a>
+				:
+				{{fiche.finaliste.user.email}}
+				<br>
+			</address>
+		</div>
+		<div class="col-sm-6 col-6 float-right ">
+			{% if fiche.isValidee %}
+				Directeur
+				<address>
+					<strong>{{fiche.directeurRetenu.grade}}
+						{{fiche.directeurRetenu|upper}}</strong><br>
+					<a href="tel:{{fiche.directeurRetenu.identite.telephone}}">
+						<span class="fa fa-phone"></span>
+					</a>
+					: (+243)
+					{{fiche.directeurRetenu.identite.telephone}}<br>
+					{% if fiche.directeurRetenu.user %}
+						<a href="tel:{{fiche.directeurRetenu.user.email}}">
+							<span class="fa fa-envelope"></span>
+						</a>
+					{% endif %}
+					:
+					{% if fiche.directeurRetenu.user %}
+						{{fiche.directeurRetenu.user.email}}
+					{% endif %}
+				</address>
+			{% else %}
+				Fiche non encore traitée et validée
+			{% endif %}
+		</div>
+	</div>
+	<h4 class="text-muted well well-sm shadow-none">Sujet :
+		<i>{{fiche.sujetRetenu}}
+		</i>
+	</h4>
+	<div class="row">
+		<div class="col-12">
+			<table id="example1" class="table table-bordered table-striped">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th nowrap>Date
+						</th>
+						<th>Oservation de l'encadreur
+						</th>
+						<th>actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for depot in fiche.depots %}
+
+						<tr>
+							<td>{{ loop.index }}</td>
+							<td>
+								Dépot:
+								{{ depot.dateDepot ? depot.dateDepot|date('d-M-Y') : '' }}
+								<br>
+								{% if depot.dateCorrection %}
+									Correction:
+									{{ depot.dateCorrection ? depot.dateDepot|date('d-M-Y') : '' }}
+								{% endif %}
+
+							</td>
+							<td>{{ depot.noteDirecteur|raw }}</td>
+							<td>
+								<div class=" btn-group">
+									<a class="btn btn-default btn-sm" href="{{ path('depot_show', {'id': depot.id}) }}">
+										<span class="fa fa-search-plus"></span>
+									</a>
+									{% if is_granted('ROLE_FINALISTE') %}
+										{% if not depot.isCorrige %}
+											<a class="btn btn-default btn-sm" href="{{ path('depot_edit', {'id': depot.id}) }}">
+												<span class="fa fa-edit"></span>
+											</a>
+										{% endif %}
+									{% endif %}
+
+									<a class="btn btn-default btn-sm" href="{{asset('uploads/brochures/')~depot.fichier}}" title="Téléchargez le fichier étudiant ">
+										<span class=" fa fa-book text-warning"></span>
+									</a>
+									{% if depot.fichierCorrigeDirecteur %}
+										<a class="btn btn-default btn-sm" href="{{asset('uploads/brochures/')~depot.fichierCorrigeDirecteur}}" title="Téléchargez le fichier enseignant ">
+											<span class=" fa fa-book text-info"></span>
+										</a>
+									{% endif %}
+									{% if is_granted('ROLE_ENSEIGNANT')%}
+										{% if not depot.isCorrige %}
+											<a class="btn btn-default btn-sm" href="{{ path('depot_edit_enseignant', {'id': depot.id}) }}" title="Répondre à ce dépot ">
+												<span class=" fa fa-reply-all"></span>
+											</a>
+										{% endif %}
+									{% endif %}
+								</div>
+							</td>
+						</tr>
+					{% else %}
+						<tr>
+							<td colspan="4" class="text-warning">aucun élément trouvé</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+			
+			<mark>
+			{{entreprise.devise|title}} </mark>
+
+			<p class="text-muted well well-sm shadow-none" style="margin-top: 10px;">
+                    Fin de la redaction: l'étudiant {{fiche.finaliste|upper}} est autorisé(e) à imprimer, rélier et déposer son travail.					
+            </p>
+
+		</div>
+	</div>
+	{#{ include('fiche/_delete_form.html.twig') }#}
+{% endblock %}
+
+
+{% block cardfooter %}
+
+	{% if is_granted('ROLE_ADMIN') %}
+		{% if not fiche.isValidee %}
+			<a class="btn btn-default" href="{{ path('fiche_traiter', {'id': fiche.id}) }}">
+				<span class="fa fa-check-circle"></span>
+				traiter et valider
+			</a>
+			<a class="btn btn-default" href="{{ path('fiche_traiter', {'id': fiche.id}) }}">
+				<span class="fa fa-times-circle "></span>
+				rejet sujet
+			</a>
+		{% endif %}
+		<a class="btn btn-default" href="{{ path('paiement_depot_new', {'id': fiche.id}) }}">
+			<span class="fa fa-check-circle"></span>
+			Payer dépot
+		</a>
+
+	{% elseif is_granted('ROLE_FINALISTE') %}
+		{% if not fiche.isSoumis %}
+			<a class="btn btn-default" href="{{ path('fiche_soumettre', {'id': fiche.id}) }}">soumettre</a>
+		{% endif %}
+		{% if not fiche.isValidee %}
+			<a class="btn btn-default" href="{{ path('fiche_edit', {'id': fiche.id}) }}">
+				<span class="fa fa-edit"></span>
+				modifier</a>
+		{% endif %}
+	{% elseif is_granted('ROLE_ENSEIGNANT') %}
+		{% if not fiche.isFeuxVert %}
+			<a class="btn btn-default" href="{{ path('fiche_feux_vert', {'id': fiche.id}) }}">
+				<span class="fa fa-fire text-success"></span>
+				feux vert</a>
+		{% endif %}
+		{# <a href="{{ path('depot_index_etudiant', {'id': fiche.id}) }}">voir les dépot</a> #}
+	{% endif %}
+	{% if fiche.isPlanifiee %}
+		<a class="btn btn-default" href="{{ path('fiche_set_defendu', {'id': fiche.id}) }}" title="Notifier que le travail de cette fiche est déja défendu">défendu</a>
+	{% endif %}
+	{% if fiche.etatFiche >=4 %}
+		<a class="btn btn-default" href="{{ path('fiche_print', {'id': fiche.id}) }}" target="_blank">
+			<span class="fa fa-print"></span>
+			imprimer</a>
+	{% endif %}
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Enseignant
+{% endblock %}
+{% block lesboutons %}
+	<a href="{{ path('enseignant_index') }}" title="Retour à la liste " class="btn btn-info">
+		<i class="fa fa-reply-all"></i>
+	</a>
+	<a type="button" title="Ajouter nouveau " class="btn btn-info">
+		<i class="fas fa-plus-circle"></i>
+	</a>
+	<a type="button" title="Modifier élément  " class="btn btn-info">
+		<i class="fas fa-edit"></i>
+	</a>
+	<a type="button" title="Supprimer élément" class="btn btn-info">
+		<i class="fas fa-trash"></i>
+	</a>
+{% endblock %}
+{% block titre %}
+	Détail Enseignant
+{% endblock %}
+{% block body %}
+	<table class="table">
+		<tbody>
+			<tr>
+				<th>Nom </th>
+				<td>{{ enseignant.identite.nom }}</td>
+			</tr>
+            <tr>
+				<th>Noms </th>
+				<td>{{ enseignant.identite.nom }}</td>
+			</tr>
+            <tr>
+				<th>Télephone </th>
+				<td>{{ enseignant.identite.telephone }}</td>
+			</tr>
+            <tr>
+				<th>E-mail </th>
+				<td>{{ enseignant.user.email }}</td>
+			</tr>
+			{% if is_granted('ROLE_ADMIN') %}
+				<tr>
+					<th>NombreDirection</th>
+					<td>{{ enseignant.nombreDirection }}</td>
+				</tr>
+				<tr>
+					<th>NombreFeuxVert</th>
+					<td>{{ enseignant.nombreFeuxVert }}</td>
+				</tr>
+			{% endif %}
+
+		</tbody>
+	</table>
+	{% if is_granted('ROLE_ADMIN') %}
+		<a href="{{ path('enseignant_edit', {'id': enseignant.id}) }}" class="btn btn-default btn-sm">
+			<span class="fa fa-edit"></span>
+		</a>
+        	{{ include('enseignant/_delete_form.html.twig') }}
+	{% endif %}
+	
+{% endblock %}

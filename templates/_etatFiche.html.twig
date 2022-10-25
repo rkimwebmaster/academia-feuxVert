@@ -1,0 +1,36 @@
+{% if app.user.finaliste.fiche.isRejete == 1 %}
+	<span class="badge badge-danger navbar-badge">
+		Votre proposition a été réjété, veuillez modifier votre proposition
+	</span>
+{% endif %}
+{% if app.user.finaliste.fiche.etatFiche == 1 %}
+	<span class="badge badge-danger navbar-badge">
+		Créée, en attente de soumission
+	</span>
+{% endif %}
+
+{% if app.user.finaliste.fiche.etatFiche == 2 %}
+	<span class="badge badge-info navbar-badge">
+		Soumis, en attente de traitement
+	</span>
+{% endif %}
+{% if app.user.finaliste.fiche.etatFiche == 3 %}
+	<span class="badge badge-primary navbar-badge">
+		Traitée, en cours de redaction
+	</span>
+{% endif %}
+{% if app.user.finaliste.fiche.etatFiche == 4 %}
+	<span class="badge badge-success navbar-badge">
+		Feux vert, en attente d'alignement defense
+	</span>
+{% endif %}
+{% if app.user.finaliste.fiche.etatFiche == 5 %}
+	<span class="badge badge-info navbar-badge">
+		Aligné, en attente de la défense
+	</span>
+{% endif %}
+{% if app.user.finaliste.fiche.etatFiche == 6 %}
+	<span class="badge badge-info navbar-badge">
+		Défendu, Bye
+	</span>
+{% endif %}

@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Lectures des memoires {% endblock %}
+{% block titre %}
+	Affecter lecteurs 
+{% endblock %}
+{% block lesboutons %}
+	<a href="{{ path('ligne_planification_index') }}" title="Retour à la liste " class="btn btn-info">
+		<i class="fa fa-reply-all"></i>
+	</a>
+{% endblock %}
+{% block positionnement %}
+	<span class="fa fa-angle-double-right"></span>
+	Planification
+	<span class="fa fa-angle-double-right"></span>
+	Affecter lectures
+{% endblock %}
+{% block body %}
+    {{ include('ligne_planification/_form.html.twig', {'button_label': 'Enregistrer'}) }}
+
+    {# {{ include('ligne_planification/_delete_form.html.twig') }} #}
+{% endblock %}

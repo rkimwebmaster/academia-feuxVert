@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Salle{% endblock %}
+
+{% block titre %}
+	Nouvelle salle 
+{% endblock %}
+{% block lesboutons %}
+	<a href="{{ path('salle_index') }}" title="Retour à la liste " class="btn btn-info">
+		<i class="fa fa-reply-all"></i>
+	</a>
+	<a type="button" href="{{url('salle_new')}}" title="Ajouter nouveau " class="btn btn-info">
+		<i class="fas fa-plus-circle"></i>
+	</a>
+{% endblock %}
+{% block positionnement %}
+	<span class="fa fa-angle-double-right"></span>
+	Salle 
+	<span class="fa fa-angle-double-right"></span>
+	Création
+{% endblock %}
+
+{% block body %}
+    {{ include('salle/_form.html.twig') }}
+
+	<br />
+	<table id="example1" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Désignation</th>
+                <th>Description</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th>#</th>
+                <th>Désignation</th>
+                <th>Description</th>
+                <th>actions</th>
+            </tr>
+        </tfoot>
+        <tbody>
+        {% for salle in salles %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ salle.designation }}</td>
+                <td>{{ salle.description }}</td>
+                <td>
+                <div class="btn-group">
+                    <a href="{{ path('salle_show', {'id': salle.id}) }}"class="btn btn-default btn-sm"><span class="fa fa-search-plus"></span></a>
+                    <a href="{{ path('salle_edit', {'id': salle.id}) }}"class="btn btn-default btn-sm"><span class="fa fa-edit"></span></a>
+                </div>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4"class="text-warning">aucun élément trouvé</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

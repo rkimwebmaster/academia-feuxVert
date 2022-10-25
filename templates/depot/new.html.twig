@@ -1,0 +1,120 @@
+{% extends 'base.html.twig' %}
+{% block lesboutons %}
+	<a href="{{ path('depot_index') }}" title="Retour à la liste " class="btn btn-info">
+		<i class="fa fa-reply-all"></i>
+	</a>
+	
+{% endblock %}
+{% block titre %}
+	Dépot de travail
+{% endblock %}
+
+{% block positionnement %}
+	<span class="fa fa-angle-double-right"></span>
+	Fiche
+	<span class="fa fa-angle-double-right"></span>
+	Dépot
+{% endblock %}
+
+{% block body %}
+	<h3 class="text-uppercase">Fiche &#x2116;
+		{{depot.fiche.id}}/{{depot.fiche.faculte|u.truncate(3)}}/{{depot.fiche.promotion.departement|u.truncate(3)}}/{{entreprise.anneeAcademiqueCourante}}</h3>
+	<div class="row">
+		<div class="col-sm-6 col-6">
+			Etudiant
+			<address>
+				<strong>{{depot.fiche.finaliste.civilite }}
+					{{depot.fiche.finaliste|upper }}</strong>
+				<br>
+				Promotion :
+				{{depot.fiche.finaliste.promotion|upper}}
+				<br>
+				<a href="tel:{{depot.fiche.finaliste.identite.telephone}}">
+					<span class="fa fa-phone"></span>
+				</a>
+				: (+243)
+				{{depot.fiche.finaliste.identite.telephone}}<br>
+				<a href="mailto:{{depot.fiche.finaliste.user.email}}">
+					<span class="fa fa-envelope"></span>
+				</a>
+				:
+				{{depot.fiche.finaliste.user.email}}
+				<br>
+			</address>
+		</div>
+		<div class="col-sm-6 col-6 float-right ">
+			{% if depot.fiche.isValidee %}
+				Directeur
+				<address>
+					<strong>{{depot.fiche.directeurRetenu.grade}}
+						{{depot.fiche.directeurRetenu|upper}}</strong><br>
+					<a href="tel:{{depot.fiche.directeurRetenu.identite.telephone}}">
+						<span class="fa fa-phone"></span>
+					</a>
+					: (+243)
+					{{depot.fiche.directeurRetenu.identite.telephone}}<br>
+					{% if depot.fiche.directeurRetenu.user %}
+						<a href="mail:{{depot.fiche.directeurRetenu.user.email}}">
+							<span class="fa fa-envelope"></span>
+						</a>
+					{% endif %}
+					:
+					{% if depot.fiche.directeurRetenu.user %}
+						{{depot.fiche.directeurRetenu.user.email}}
+					{% endif %}
+				</address>
+			{% else %}
+				Directeur proposé
+				<address>
+					<strong>{{depot.fiche.directeurPropose.grade}}
+						{{depot.fiche.directeurPropose|upper}}</strong><br>
+					<a href="tel:{{depot.fiche.directeurPropose.identite.telephone}}">
+						<span class="fa fa-phone"></span>
+					</a>
+					: (+243)
+					{{depot.fiche.directeurPropose.identite.telephone}}<br>
+					{% if depot.fiche.directeurPropose.user %}
+						<a href="mail:{{depot.fiche.directeurPropose.user.email}}">
+							<span class="fa fa-envelope"></span>
+						</a>
+					{% endif %}
+					:
+					{% if depot.fiche.directeurPropose.user %}
+						{{depot.fiche.directeurPropose.user.email}}
+					{% endif %}
+				</address>
+			{% endif %}
+		</div>
+	</div>
+	<h6>
+		<i>
+			Date proposition :
+			{{depot.fiche.date|date('d/M/Y')}}
+		</i>
+	</h6>
+	{{ form_start(form) }}
+	<div class="row">
+		<div class="col-md-6 form-group">
+			{{ form_row(form.demandezRendezVous) }}
+		</div>
+		<div class="col-md-6 form-group">
+			{{ form_row(form.brochure) }}
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 form-group">
+			{{ form_row(form.titre) }}
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 form-group">
+			{{ form_row(form.noteEtudiant) }}
+		</div>
+	</div>
+
+	<button class="btn btn-default ">
+		<span class="fa fa-download"></span>
+		{{ button_label|default('Enregister') }}</button>
+	{{ form_end(form) }}
+
+{% endblock %}

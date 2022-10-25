@@ -1,0 +1,155 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Depot index
+{% endblock %}
+{% block lesboutons %}
+	<a href="{{ path('depot_index') }}" title="Retour à la liste " class="btn btn-info">
+		<i class="fa fa-reply-all"></i>
+	</a>
+{% endblock %}
+{% block titre %}
+	{% if is_granted('ROLE_ADMIN') %}
+		Liste des dépots étudiants
+	{% elseif is_granted('ROLE_ENSEIGNANT') %}
+		Liste des dépots
+		{% if texte is defined %}
+			{{texte}}
+		{% endif %}
+	{% elseif is_granted('ROLE_FINALISTE') %}
+		Tous de mes  dépots
+	{% endif %}
+
+{% endblock %}
+
+{% block positionnement %}
+	<span class="fa fa-angle-double-right"></span>
+	Fiche
+	<span class="fa fa-angle-double-right"></span>
+	Dépots
+{% endblock %}
+{% block body %}
+	{# <div class="row">
+		<div class="col-12 col-sm-4">
+			<div class="info-box bg-light">
+				<div class="info-box-content">
+					<span class="info-box-text text-center text-muted">Estimated budget</span>
+					<span class="info-box-number text-center text-muted mb-0">2300</span>
+				</div>
+			</div>
+		</div>
+		<div class="col-12 col-sm-4">
+			<div class="info-box bg-light">
+				<div class="info-box-content">
+					<span class="info-box-text text-center text-muted">Total amount spent</span>
+					<span class="info-box-number text-center text-muted mb-0">2000</span>
+				</div>
+			</div>
+		</div>
+		<div class="col-12 col-sm-4">
+			<div class="info-box bg-light">
+				<div class="info-box-content">
+					<span class="info-box-text text-center text-muted">Estimated project duration</span>
+					<span class="info-box-number text-center text-muted mb-0">20</span>
+				</div>
+			</div>
+		</div>
+	</div> #}
+
+	{# <div class="row">
+		<div class="col-12">
+			<h4> Dépot récent </h4>
+		{% for depot in depots %}
+			<div class="post">
+				<div class="user-block">
+					<img class="img-circle img-bordered-sm" src="../../dist/img/user1-128x128.jpg" alt="user image">
+					<span class="username">
+						<a href="#">{{depot.fiche.finaliste}} <span class="fa fa-phone"> </span></a>
+					</span>
+					<span class="description">
+					{{ depot.isCorrige? '<span class="fa fa-check-circle text-success" title="Corrigé" ></span>' : '<span title="Non corrigé"  class="fa fa-times-circle text-danger"></span>' }}
+					- 
+					{{depot.date|date('d-M-Y')}}</span>
+				</div>
+				<!-- /.user-block -->
+				<p>
+					{{depot.noteEtudiant}}
+				</p>
+
+				<p>
+				{% if depot.fichier %}
+					<a href="{{asset('uploads/brochures/'~depot.fichier)}}" class="link-black text-sm">
+						<i class="fas fa-link mr-1"></i>
+						Fichier attaché </a>
+					{% endif %}
+				</p>
+			</div>
+		{% endfor %}
+		</div>
+	</div> #}
+	<table id="example1" class="table table-bordered table-striped">
+		
+<tbody>
+			{% for depot in depots %}
+				<tr>
+					<td class="text-vertical-align-center">{{loop.index }}</td>
+					<td colspan="5" class="text-warning">
+						<div class="post">
+							<div class="user-block">
+								{% if depot.isCorrige %}
+									<img class="img-circle text-success img-bordered-sm" src="{{asset('images/svg/check-square.svg')}}" alt="user image">
+								{% else %}
+									<img class="img-circle text-success img-bordered-sm" src="{{asset('images/svg/times-circle.svg')}}" alt="user image">
+								{% endif %}
+								<span class="username">
+									<a href="{{url('depot_show',{'id':depot.id})}}">{{depot.fiche.finaliste|upper}} <span class="fa fa-angle-double-right"></span>{{depot.fiche.promotion|upper}} <span class="fa fa-angle-double-right"></span> {{depot.titre}}</a>
+									{# {% if not depot.isCorrige %}
+									<a class="btn btn-default btn-sm" href="{{ path('depot_edit_enseignant', {'id': depot.id}) }}" title="Répondre à ce dépot ">
+										<span class=" fa fa-reply-all"></span>
+									</a>
+								{% endif %} #}
+								</span>
+								<span class="description">
+									{% if depot.isCorrige %}
+										Corrigé le
+										{{depot.dateCorrection|date('d-M-Y')}}
+									{% else %}
+										Déposé le
+										{{depot.date|date('d-M-Y')}}
+									{% endif  %}
+								</span>
+							</div>
+							<!-- /.user-block -->
+							<p>
+								{% if depot.isCorrige %}
+									{{depot.noteDirecteur|u.truncate(350)|raw}}
+								{% else %}
+									{{depot.noteEtudiant|u.truncate(350)|raw}}
+								{% endif %}
+							</p>
+
+							<p>
+								{% if depot.isCorrige %}
+									{% if depot.fichierCorrigeDirecteur %}
+										<a href="{{asset('uploads/brochures/'~depot.fichierCorrigeDirecteur)}}" class="link-black text-sm">
+											<i class="fas fa-link mr-1"></i>
+											{{depot.fichierCorrigeDirecteur}}
+										</a>
+									{% endif %}
+								{% else %}
+									<a href="{{asset('uploads/brochures/'~depot.fichier)}}" class="link-black text-sm">
+										<i class="fas fa-link mr-1"></i>
+										{{depot.fichier }}
+									</a>
+								{% endif %}
+							</p>
+						</div>
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="2" class="text-warning">aucun élément trouvé</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+{% endblock %}
